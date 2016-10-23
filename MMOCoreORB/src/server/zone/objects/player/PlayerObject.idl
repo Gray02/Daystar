@@ -202,8 +202,6 @@ class PlayerObject extends IntangibleObject {
 
 	protected int pvpRating;
 
-	protected int factionStatus;
-
 	@dereferenced
 	protected Vector<byte> hologrindProfessions;
 
@@ -332,8 +330,6 @@ class PlayerObject extends IntangibleObject {
 		chosenVeteranRewards.setNoDuplicateInsertPlan();
 
 		accountID = 0;
-
-		factionStatus = 0;
 
 		clientLastMovementStamp = 0;
 
@@ -1523,13 +1519,6 @@ class PlayerObject extends IntangibleObject {
 	public void setAccountID(unsigned int id) {
 		accountID = id;
 	}
-
-	@read
-	public int getFactionStatus() {
-		return factionStatus;
-	}
-
-	public native void setFactionStatus(int status);
 
 	@read
 	public unsigned int getClientLastMovementStamp() {
