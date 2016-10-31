@@ -63,6 +63,14 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 		{
 			"Learn Skill",
 			{
+				"DayStar Jedi Testing",
+				{
+					"Skill Set 1", "force_sensitive_training_master",
+					"Skill Set 2",
+					{
+							"jedi_padawan_master",
+					},
+				},			
 				"Architect",
 				{
 					"Novice", "crafting_architect_novice",
@@ -1519,11 +1527,13 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			"Clear DOTs", "clear_dots",
 			"Max XP", "max_xp",
 			"Become Glowy", "become_glowy",
+			"jedi saber", "object/weapon/melee/sword/crafted_saber/sword_lightsaber_one_handed_gen4.iff",
 			"Faction Points",
 			{
 				"Imperial", "faction_imperial",
 				"Rebel", "faction_rebel"
 			}
+			
 		},
 		"Items",
 		{
