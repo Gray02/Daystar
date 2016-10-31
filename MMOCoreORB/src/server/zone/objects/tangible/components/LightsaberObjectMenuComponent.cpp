@@ -27,6 +27,9 @@ void LightsaberObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObj
 
 	String text = "@jedi_spam:open_saber";
 	menuResponse->addRadialMenuItem(89, 3, text);
+	
+	String fix = "Fix";
+	menuResponse->addRadialMenuItem(90, 3, fix);
 
 }
 
@@ -39,7 +42,8 @@ int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObje
 
 	// Admins should be able to open.
 	if (!sceneObject->isASubChildOf(player) && !playObject->isPrivileged())
-		return 0;
+		return 1;
+		//return 0; Turned this off, it should allow people who didn't craft the saber to use it.
 
 	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(sceneObject);
 
@@ -57,6 +61,6 @@ int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObje
 
 		weapon->sendContainerTo(player);
 	}
-
+	
 	return TangibleObjectMenuComponent::handleObjectMenuSelect(sceneObject, player, selectedID);
 }
