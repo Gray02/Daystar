@@ -118,8 +118,8 @@ object_weapon_melee_sword_crafted_saber_sword_lightsaber_one_handed_gen4 = objec
 
 	defenderToughnessModifiers = { "lightsaber_toughness" },
 	
-	minDamage = 150,
-	maxDamage = 300,
+	minDamage = 200,
+	maxDamage = 400,
 	
 	noTrade = 1,
 	
