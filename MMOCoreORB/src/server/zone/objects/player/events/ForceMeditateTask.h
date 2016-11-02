@@ -39,12 +39,12 @@ public:
 			if (!player->isMeditating())
 				return;
 			if (player->isBleeding() || player->isPoisoned() || player->isDiseased()) {
-				if (player->isBleeding() && meditateMod >= 15)
-					player->healDot(CreatureState::BLEEDING, (15 + (meditateMod / 3)));
-				else if (player->isPoisoned() && meditateMod >= 30)
-					player->healDot(CreatureState::POISONED, (15 + (meditateMod / 3)));
-				else if (player->isDiseased() && meditateMod >= 45)
-					player->healDot(CreatureState::DISEASED, (15 + (meditateMod / 3)));
+				if (player->isBleeding())
+					player->healDot(CreatureState::BLEEDING, (15));
+				else if (player->isPoisoned())
+					player->healDot(CreatureState::POISONED, (15));
+				else if (player->isDiseased())
+					player->healDot(CreatureState::DISEASED, (15));
 				
 				StringIdChatParameter healParams;
 
