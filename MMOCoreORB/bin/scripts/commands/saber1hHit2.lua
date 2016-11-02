@@ -57,18 +57,6 @@ Saber1hHit2Command = {
 
 	combatSpam = "saber1hhit2",
 
-	stateEffects = {
-	  StateEffect( 
-		BLIND_EFFECT, 
-		{}, 
-		{ "blind_defense", "resistance_states" }, 
-		{ "jedi_state_defense" }, 
-		50, 
-		0, 
-		45 
-	  )
-	},
-
 	poolsToDamage = RANDOM_ATTRIBUTE,
 
 	weaponType = ONEHANDJEDIWEAPON,
