@@ -32,11 +32,11 @@ public:
 		int resist = (creature->getSkillMod("force_resist");
 			      
 		if (resist > 0) {
-			skillMods.put("resistance_bleeding", 25 + resist);
-			skillMods.put("absorption_bleeding", 25 + resist);
+			creature->setSkillModifier("resistance_bleeding", 25 + resist);
+			creature->setSkillModifier("absorption_bleeding", 25 + resist);
 		} else {
-			skillMods.put("resistance_bleeding", 25);
-			skillMods.put("absorption_bleeding", 25);
+			creature->setSkillModifier("resistance_bleeding", 25);
+			creature->setSkillModifier("absorption_bleeding", 25);
 		}
 			      
 		return SUCCESS;
