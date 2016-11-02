@@ -789,7 +789,12 @@ float CombatManager::getDefenderToughnessModifier(CreatureObject* defender, int 
 	if (attackType == weapon->getAttackType()) {
 		for (int i = 0; i < defenseToughMods->size(); ++i) {
 			int toughMod = defender->getSkillMod(defenseToughMods->get(i));
-			if (toughMod > 0) damage *= 1.f - (toughMod / 100.f);
+			//Increase LS damage
+			if (toughMod > 0 && damType == SharedWeaponObjectTemplate::LIGHTSABER) {
+				damage *= 1.05f - (toughMod / 100.f);
+			} else {
+				(toughMod > 0) damage *= 1.f - (toughMod / 100.f);
+			}
 		}
 	}
 
@@ -1402,9 +1407,13 @@ float CombatManager::calculateDamage(CreatureObject* attacker, WeaponObject* wea
 	else
 		damage = getDefenderToughnessModifier(defender, weapon->getAttackType(), weapon->getDamageType(), damage);
 
-	// PvP Damage Reduction.
+	// PvP Damage Reduction. Increased overall lightsaber damage in PvP
 	if (attacker->isPlayerCreature() && defender->isPlayerCreature()) {
-		damage *= 0.25;
+		if (weapon->getAttackType() == SharedWeaponObjectTemplate::LIGHTSABER) {
+			damage *= 0.35;
+		} else {
+			damage *= 0.25;
+		}
 	}
 
 	if (damage < 1) damage = 1;
