@@ -38,7 +38,53 @@ public:
 
 			if (!player->isMeditating())
 				return;
+			if (player->isBleeding() || player->isPoisoned() || player->isDiseased()) {
+				if (player->isBleeding() && meditateMod >= 15)
+					player->healDot(CreatureState::BLEEDING, (15 + (meditateMod / 3)));
+				else if (player->isPoisoned() && meditateMod >= 30)
+					player->healDot(CreatureState::POISONED, (15 + (meditateMod / 3)));
+				else if (player->isDiseased() && meditateMod >= 45)
+					player->healDot(CreatureState::DISEASED, (15 + (meditateMod / 3)));
+				
+				StringIdChatParameter healParams;
 
+				//Here we are checking to see which pools have wounds, and we add them to a vector...
+				Vector<uint8> woundedPools;
+				for (uint8 i = 0; i < 9; ++i) {
+					if (player->getWounds(i) > 0)
+						woundedPools.add(i);
+				}
+
+				//Return without rescheduling because everything that can be healed has been?
+				if (woundedPools.size() <= 0)
+					return;
+
+				int heal = 30 + System::random(20);
+
+				// Select a random Attribute that has wounds...
+				uint8 pool = woundedPools.get(System::random(woundedPools.size() - 1));
+
+				int wounds = player->getWounds(pool);
+
+				//Cap the heal at the amount of wounds the creature has.
+				heal = MIN(wounds, heal);
+
+				player->healWound(player, pool, heal, true, false);
+
+				// Sending System healing Message (wounds)
+				healParams.setStringId("teraskasi", "prose_curewound"); // [meditation] Your %TO wounds heal by %DI points.
+				healParams.setTO(CreatureAttribute::getName(pool));
+				healParams.setDI(heal);
+				player->sendSystemMessage(healParams);
+				
+				int bf = player->getShockWounds();
+				if (bf > 9) {
+					player->addShockWounds(-10, true);
+				} else {
+					player->setShockWounds(0);
+				}
+				
+			}
 
 			if (fmeditateTask != NULL)
 				fmeditateTask->reschedule(5000);
