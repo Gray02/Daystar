@@ -29,7 +29,8 @@ public:
 			creature->sendSystemMessage("You already have this buff");
 			return GENERALERROR;
 }
-		int resist = (creature->getSkillMod("force_resist")
+		int resist = (creature->getSkillMod("force_resist");
+			      
 		if (resist > 0) {
 			skillMods.put("resistance_bleeding", 25 + resist);
 			skillMods.put("absorption_bleeding", 25 + resist);
