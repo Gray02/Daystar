@@ -39,7 +39,7 @@ public:
 		int forceCost = 100;
                 
 		ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
-		int resist = (playerObject->getSkillMod("force_resist"));
+		int resist = (creature->getSkillMod("force_resist"));
 
 		if (playerObject->getForcePower() <= forceCost) {
 			creature->sendSystemMessage("You don't have enough Force to preform this ability");
