@@ -63,7 +63,7 @@ Saber1hComboHit2Command = {
 		{ "jedi_state_defense" }, 
 		85, 
 		0, 
-		60
+		10
 	  ),
 	  StateEffect( 
 		STUN_EFFECT, 
@@ -72,7 +72,7 @@ Saber1hComboHit2Command = {
 		{ "jedi_state_defense" }, 
 		85, 
 		0, 
-		60
+		10
 	  )
 },
 
