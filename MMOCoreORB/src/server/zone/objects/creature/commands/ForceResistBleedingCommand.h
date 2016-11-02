@@ -14,14 +14,31 @@ public:
 		: JediQueueCommand(name, server) {
 
 		buffCRC = BuffCRC::JEDI_RESIST_BLEEDING;
-
+/*
 		skillMods.put("resistance_bleeding", 25);
 		skillMods.put("absorption_bleeding", 25);
+*/
 
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
-		return doJediSelfBuffCommand(creature);
+		
+		int res = creature->hasBuff(buffCRC) ? NOSTACKJEDIBUFF : doJediSelfBuffCommand(creature);
+
+		if (res == NOSTACKJEDIBUFF) {
+			creature->sendSystemMessage("You already have this buff");
+			return GENERALERROR;
+}
+		int resist = (creature->getSkillMod("force_resist")
+		if (resist > 0) {
+			skillMods.put("resistance_bleeding", 25 + resist);
+			skillMods.put("absorption_bleeding", 25 + resist);
+		} else {
+			skillMods.put("resistance_bleeding", 25);
+			skillMods.put("absorption_bleeding", 25);
+		}
+			      
+		return SUCCESS;
 	}
 
 };
