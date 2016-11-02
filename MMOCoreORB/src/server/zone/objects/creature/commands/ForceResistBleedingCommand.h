@@ -13,35 +13,62 @@ public:
 	ForceResistBleedingCommand(const String& name, ZoneProcessServer* server)
 		: JediQueueCommand(name, server) {
 
-		buffCRC = BuffCRC::JEDI_RESIST_BLEEDING;
-/*
-		skillMods.put("resistance_bleeding", 25);
-		skillMods.put("absorption_bleeding", 25);
-*/
-
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
 		
-		int res = creature->hasBuff(buffCRC) ? NOSTACKJEDIBUFF : doJediSelfBuffCommand(creature);
+		if (!checkStateMask(creature))
+			return INVALIDSTATE;
 
-		if (res == NOSTACKJEDIBUFF) {
-			creature->sendSystemMessage("You already have this buff");
-			return GENERALERROR;
-}
-		int resist = (creature->getSkillMod("force_resist");
-			      
-		if (resist > 0) {
-			creature->setSkillModifier("resistance_bleeding", 25 + resist);
-			creature->setSkillModifier("absorption_bleeding", 25 + resist);
-		} else {
-			creature->setSkillModifier("resistance_bleeding", 25);
-			creature->setSkillModifier("absorption_bleeding", 25);
+		if (!checkInvalidLocomotions(creature))
+			return INVALIDLOCOMOTION;
+
+		if (isWearingArmor(creature)) {
+			return NOJEDIARMOR;
 		}
-			      
-		return SUCCESS;
-	}
 
+		uint32 forceResistBleedingCRC = BuffCRC::JEDI_RESIST_BLEEDING;
+
+		
+		if(creature->hasBuff(forceResistBleedingCRC)) {
+			creature->sendSystemMessage("@jedi_spam:force_buff_present"); //"You already have a similar Force enhancement active."
+			return GENERALERROR;
+		}
+		
+		// Force cost of skill.
+		int forceCost = 100;
+                
+		ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
+		int resist = (creature->getSkillMod("force_resist");
+
+		if (playerObject->getForcePower() <= forceCost) {
+			creature->sendSystemMessage("You don't have enough Force to preform this ability");
+			return false;
+		}
+                              
+                //Need updated strings
+		StringIdChatParameter startStringId("jedi_spam", "apply_forcerun1");
+		StringIdChatParameter endStringId("jedi_spam", "remove_forcerun1");
+
+		int duration = 360 + resist;
+
+		ManagedReference<Buff*> buff = new Buff(creature, forceRun1CRC, duration, BuffType::JEDI);
+		buff->setSpeedMultiplierMod(1.5f);
+		buff->setAccelerationMultiplierMod(1.5f);
+		buff->setStartMessage(startStringId);
+		buff->setEndMessage(endStringId);
+		buff->setSkillModifier("resistance_bleeding", 25 + resist);
+		buff->setSkillModifier("absorption_bleeding", 25 + resist);
+
+                if (playerObject->getForcePower() >= forceCost) {
+		        creature->addBuff(buff);
+	                playerObject->setForcePower(playerObject->getForcePower() - forceCost);
+		        //creature->playEffect("clienteffect/pl_force_run_self.cef", "");
+                        return SUCCESS;
+                } else {
+                        return GENEALERROR;
+                }
+        }
 };
-
+		
 #endif //FORCERESISTBLEEDINGCOMMAND_H_
