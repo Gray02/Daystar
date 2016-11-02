@@ -66,6 +66,8 @@ public:
 		        //creature->playEffect("clienteffect/pl_force_run_self.cef", "");
                         return SUCCESS;
                 }
+		
+		return GENERALERROR;
         }
 };
 		
