@@ -54,24 +54,25 @@ public:
 					if (player->getWounds(i) > 0)
 						woundedPools.add(i);
 				}
+					
+				if (woundedPools.size() > 0) {
+					int heal = 30 + System::random(20);
 
-				int heal = 30 + System::random(20);
+					// Select a random Attribute that has wounds...
+					uint8 pool = woundedPools.get(System::random(woundedPools.size() - 1));
 
-				// Select a random Attribute that has wounds...
-				uint8 pool = woundedPools.get(System::random(woundedPools.size() - 1));
+					int wounds = player->getWounds(pool);
 
-				int wounds = player->getWounds(pool);
+					//Cap the heal at the amount of wounds the creature has.
+					heal = MIN(wounds, heal);
+					player->healWound(player, pool, heal, true, false);
 
-				//Cap the heal at the amount of wounds the creature has.
-				heal = MIN(wounds, heal);
-
-				player->healWound(player, pool, heal, true, false);
-
-				// Sending System healing Message (wounds)
-				healParams.setStringId("teraskasi", "prose_curewound"); // [meditation] Your %TO wounds heal by %DI points.
-				healParams.setTO(CreatureAttribute::getName(pool));
-				healParams.setDI(heal);
-				player->sendSystemMessage(healParams);
+					// Sending System healing Message (wounds)
+					healParams.setStringId("teraskasi", "prose_curewound"); // [meditation] Your %TO wounds heal by %DI points.
+					healParams.setTO(CreatureAttribute::getName(pool));
+					healParams.setDI(heal);
+					player->sendSystemMessage(healParams);
+				}
 				
 				int bf = player->getShockWounds();
 				if (bf > 9) {
@@ -84,6 +85,7 @@ public:
 
 			if (fmeditateTask != NULL)
 				fmeditateTask->reschedule(5000);
+				player->playEffect("clienteffect/pl_force_meditate_self.cef", "");
 
 		} catch (Exception& e) {
 			player->error("unreported exception caught in ForceMeditateTask::activate");
