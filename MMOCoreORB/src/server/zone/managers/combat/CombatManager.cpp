@@ -792,8 +792,9 @@ float CombatManager::getDefenderToughnessModifier(CreatureObject* defender, int 
 			//Increase LS damage
 			if (toughMod > 0 && damType == SharedWeaponObjectTemplate::LIGHTSABER) {
 				damage *= 1.05f - (toughMod / 100.f);
-			} else {
-				(toughMod > 0) damage *= 1.f - (toughMod / 100.f);
+			}
+			if (toughMod > 0) {
+				damage *= 1.f - (toughMod / 100.f);
 			}
 		}
 	}
