@@ -43,7 +43,7 @@ public:
 
 		// Play Client Effect once.
 
-		creature->playEffect("clienteffect/pl_force_meditate_self.cef", "");
+		//creature->playEffect("clienteffect/pl_force_meditate_self.cef", "");
 
 		// Force Meditate Task
 		ManagedReference<PlayerObject*> ghost = creature->getPlayerObject();
@@ -51,7 +51,7 @@ public:
 		creature->sendSystemMessage("@teraskasi:med_begin");
 		Reference<ForceMeditateTask*> fmeditateTask = new ForceMeditateTask(creature);
 		fmeditateTask->setMoodString(creature->getMoodString());
-		creature->addPendingTask("forcemeditate", fmeditateTask, 3500);
+		creature->addPendingTask("forcemeditate", fmeditateTask, 500);
 
 		creature->setMeditateState();
 
