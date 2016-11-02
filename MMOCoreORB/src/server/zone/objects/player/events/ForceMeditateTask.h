@@ -79,14 +79,14 @@ public:
 			int bf = player->getShockWounds();
 			if (bf > 9) {
 				player->addShockWounds(-10, true);
-				player->sendSystemMessage("You heal 10 Battle Fatigue");
-			} else {
+				player->sendSystemMessage("You heal 10 Battle Fatigue.");
+			} else if (bf < 10 && bf != 0) {
 				player->setShockWounds(0);
-				player->sendSystemMessage("You finish healing your Battle Fatigue");
+				player->sendSystemMessage("You finish healing your Battle Fatigue.");
 			}
 
 			if (fmeditateTask != NULL)
-				fmeditateTask->reschedule(5000);
+				fmeditateTask->reschedule(10000);
 				player->playEffect("clienteffect/pl_force_meditate_self.cef", "");
 
 		} catch (Exception& e) {
