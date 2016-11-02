@@ -55,10 +55,6 @@ public:
 						woundedPools.add(i);
 				}
 
-				//Return without rescheduling because everything that can be healed has been?
-				if (woundedPools.size() <= 0)
-					return;
-
 				int heal = 30 + System::random(20);
 
 				// Select a random Attribute that has wounds...
