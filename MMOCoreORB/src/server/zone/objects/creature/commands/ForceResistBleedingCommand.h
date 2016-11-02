@@ -39,7 +39,7 @@ public:
 		int forceCost = 100;
                 
 		ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
-		int resist = (creature->getSkillMod("force_resist");
+		int resist = (playerObject->getSkillMod("force_resist");
 
 		if (playerObject->getForcePower() <= forceCost) {
 			creature->sendSystemMessage("You don't have enough Force to preform this ability");
@@ -52,7 +52,7 @@ public:
 
 		int duration = 360 + resist;
 
-		ManagedReference<Buff*> buff = new Buff(creature, forceRun1CRC, duration, BuffType::JEDI);
+		ManagedReference<Buff*> buff = new Buff(creature, forceResistBleedingCRC, duration, BuffType::JEDI);
 		buff->setSpeedMultiplierMod(1.5f);
 		buff->setAccelerationMultiplierMod(1.5f);
 		buff->setStartMessage(startStringId);
@@ -65,8 +65,6 @@ public:
 	                playerObject->setForcePower(playerObject->getForcePower() - forceCost);
 		        //creature->playEffect("clienteffect/pl_force_run_self.cef", "");
                         return SUCCESS;
-                } else {
-                        return GENEALERROR;
                 }
         }
 };
