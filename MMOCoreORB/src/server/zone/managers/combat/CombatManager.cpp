@@ -789,12 +789,6 @@ float CombatManager::getDefenderToughnessModifier(CreatureObject* defender, int 
 	if (attackType == weapon->getAttackType()) {
 		for (int i = 0; i < defenseToughMods->size(); ++i) {
 			int toughMod = defender->getSkillMod(defenseToughMods->get(i));
-			int newToughMod = toughMod * 0.2;
-			
-			//Increase LS damage
-			if (toughMod > 0 && damType == SharedWeaponObjectTemplate::LIGHTSABER) {
-				damage *= 1.f - (newToughMod / 100.f);
-			}
 			if (toughMod > 0) {
 				damage *= 1.f - (toughMod / 100.f);
 			}
@@ -804,6 +798,10 @@ float CombatManager::getDefenderToughnessModifier(CreatureObject* defender, int 
 	int jediToughness = defender->getSkillMod("jedi_toughness");
 	if (damType != SharedWeaponObjectTemplate::LIGHTSABER && jediToughness > 0)
 		damage *= 1.f - (jediToughness / 100.f);
+	
+	//testing
+	if (damType == SharedWeaponObjectTemplate::LIGHTSABER)
+		damage *= 1.f;
 
 	return damage < 0 ? 0 : damage;
 }
