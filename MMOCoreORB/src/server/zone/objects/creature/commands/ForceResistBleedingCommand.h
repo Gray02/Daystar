@@ -7,13 +7,14 @@
 
 #include "server/zone/objects/scene/SceneObject.h"
 
-class ForceResistBleedingCommand : public JediQueueCommand {
+
+class ForceResistBleedingCommand : public QueueCommand {
 public:
 
 	ForceResistBleedingCommand(const String& name, ZoneProcessServer* server)
-		: JediQueueCommand(name, server) {
+		: QueueCommand(name, server) {
 
-	}
+}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
 		
@@ -40,6 +41,8 @@ public:
                 
 		ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
 		int resist = (creature->getSkillMod("force_resist"));
+		int resistBle = (creature->getSkillMod("resistance_bleeding");
+		int absorbBle = (creature->getSkillMod("absorption_bleeding");
 
 		if (playerObject->getForcePower() <= forceCost) {
 			creature->sendSystemMessage("You don't have enough Force to preform this ability");
@@ -47,23 +50,21 @@ public:
 		}
                               
                 //Need updated strings
-		StringIdChatParameter startStringId("jedi_spam", "apply_forcerun1");
-		StringIdChatParameter endStringId("jedi_spam", "remove_forcerun1");
+		StringIdChatParameter startStringId("jedi_spam", "apply_forceresistbleeding");
+		StringIdChatParameter endStringId("jedi_spam", "remove_forceresistbleeding");
 
 		int duration = 360 + resist;
-
 		ManagedReference<Buff*> buff = new Buff(creature, forceResistBleedingCRC, duration, BuffType::JEDI);
-		buff->setSpeedMultiplierMod(1.5f);
-		buff->setAccelerationMultiplierMod(1.5f);
 		buff->setStartMessage(startStringId);
 		buff->setEndMessage(endStringId);
-		buff->setSkillModifier("resistance_bleeding", 25 + resist);
-		buff->setSkillModifier("absorption_bleeding", 25 + resist);
+		buff->setSkillModifier("resistance_bleeding", 25 + resist + resistBle);
+		buff->setSkillModifier("absorption_bleeding", 25 + resist + absorbBle);
 
                 if (playerObject->getForcePower() >= forceCost) {
 		        creature->addBuff(buff);
 	                playerObject->setForcePower(playerObject->getForcePower() - forceCost);
-		        //creature->playEffect("clienteffect/pl_force_run_self.cef", "");
+		        creature->playEffect("clienteffect/pl_force_resist_bleeding_self.cef", "");
+			creature->sendSystemMessage("your resist to bleeding is: " + resistBle + " and your absorb is: " + absorbBle);
                         return SUCCESS;
                 }
 		
