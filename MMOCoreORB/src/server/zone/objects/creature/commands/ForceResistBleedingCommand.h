@@ -41,8 +41,8 @@ public:
                 
 		ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
 		int resist = (creature->getSkillMod("force_resist"));
-		int resistBle = (creature->getSkillMod("resistance_bleeding");
-		int absorbBle = (creature->getSkillMod("absorption_bleeding");
+		int resistBle = (creature->getSkillMod("resistance_bleeding"));
+		int absorbBle = (creature->getSkillMod("absorption_bleeding"));
 
 		if (playerObject->getForcePower() <= forceCost) {
 			creature->sendSystemMessage("You don't have enough Force to preform this ability");
