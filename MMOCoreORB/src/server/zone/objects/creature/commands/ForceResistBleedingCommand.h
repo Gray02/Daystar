@@ -64,7 +64,6 @@ public:
 		        creature->addBuff(buff);
 	                playerObject->setForcePower(playerObject->getForcePower() - forceCost);
 		        creature->playEffect("clienteffect/pl_force_resist_bleeding_self.cef", "");
-			creature->sendSystemMessage("your resist to bleeding is: " + resistBle + " and your absorb is: " + absorbBle);
                         return SUCCESS;
                 }
 		
