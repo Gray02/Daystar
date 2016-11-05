@@ -27,10 +27,10 @@ public:
 			return NOJEDIARMOR;
 		}
 
-		uint32 forceResistBleedingCRC = BuffCRC::JEDI_RESIST_BLEEDING;
+		uint32 forceResistDiseaseCRC = BuffCRC::JEDI_RESIST_DISEASE;
 
 		
-		if(creature->hasBuff(forceResistBleedingCRC)) {
+		if(creature->hasBuff(forceResistDiseaseCRC)) {
 			creature->sendSystemMessage("@jedi_spam:force_buff_present"); //"You already have a similar Force enhancement active."
 			return GENERALERROR;
 		}
@@ -53,7 +53,7 @@ public:
 		StringIdChatParameter endStringId("jedi_spam", "remove_forceresistdisease");
 
 		int duration = 360 + resist;
-		ManagedReference<Buff*> buff = new Buff(creature, forceResistBleedingCRC, duration, BuffType::JEDI);
+		ManagedReference<Buff*> buff = new Buff(creature, forceResistDiseaseCRC, duration, BuffType::JEDI);
 		buff->setStartMessage(startStringId);
 		buff->setEndMessage(endStringId);
 		buff->setSkillModifier("resistance_disease", 25 + resist + resistBle);
