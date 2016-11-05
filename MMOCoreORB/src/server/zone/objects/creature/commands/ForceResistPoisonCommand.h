@@ -7,7 +7,7 @@
 
 #include "server/zone/objects/scene/SceneObject.h"
 
-class ForceResistPoisonCommand : public JediQueueCommand {
+class ForceResistPoisonCommand : public QueueCommand {
 public:
 
 	ForceResistPoisonCommand(const String& name, ZoneProcessServer* server)
