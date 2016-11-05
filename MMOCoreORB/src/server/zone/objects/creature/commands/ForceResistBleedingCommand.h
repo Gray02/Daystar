@@ -59,15 +59,11 @@ public:
 		buff->setEndMessage(endStringId);
 		buff->setSkillModifier("resistance_bleeding", 25 + resist + resistBle);
 		buff->setSkillModifier("absorption_bleeding", 25 + resist + absorbBle);
-
-                if (playerObject->getForcePower() >= forceCost) {
-		        creature->addBuff(buff);
-	                playerObject->setForcePower(playerObject->getForcePower() - forceCost);
-		        creature->playEffect("clienteffect/pl_force_resist_bleeding_self.cef", "");
-                        return SUCCESS;
-                }
+		creature->addBuff(buff);
 		
-		return GENERALERROR;
+	        playerObject->setForcePower(playerObject->getForcePower() - forceCost);
+		creature->playEffect("clienteffect/pl_force_resist_bleeding_self.cef", "");
+                return SUCCESS;
         }
 };
 		
