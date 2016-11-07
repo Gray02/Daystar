@@ -2,13 +2,12 @@
 #define HEALACTIONSELF1COMMAND_H_
 
 #include "server/zone/objects/scene/SceneObject.h"
-#include "ForceHealQueueCommand.h"
 
-class HealActionSelf1Command : public ForceHealQueueCommand {
+class HealActionSelf1Command : public QueueCommand {
 public:
 
 	HealActionSelf1Command(const String& name, ZoneProcessServer* server)
-: ForceHealQueueCommand(name, server) {
+: QueueCommand(name, server) {
 
 	}
 
