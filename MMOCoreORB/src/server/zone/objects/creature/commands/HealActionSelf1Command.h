@@ -2,15 +2,15 @@
 				Copyright <SWGEmu>
 		See file COPYING for copying conditions.*/
 
-#ifndef HEALACTIONSELF2COMMAND_H_
-#define HEALACTIONSELF2COMMAND_H_
+#ifndef HEALACTIONSELF1COMMAND_H_
+#define HEALACTIONSELF1COMMAND_H_
 
 #include "server/zone/objects/scene/SceneObject.h"
 #include "ForceHealQueueCommand.h"
 
-class HealActionSelf2Command : public ForceHealQueueCommand {
+class HealActionSelf1Command : public ForceHealQueueCommand {
 public:
-	HealActionSelf2Command(const String& name, ZoneProcessServer* server) : ForceHealQueueCommand(name, server) {}
+	HealActionSelf1Command(const String& name, ZoneProcessServer* server) : ForceHealQueueCommand(name, server) {}
 };
 
 #endif //HEALACTIONSELF2COMMAND_H_
