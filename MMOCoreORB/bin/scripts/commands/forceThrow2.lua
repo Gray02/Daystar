@@ -71,7 +71,7 @@ ForceThrow2Command = {
 	poolsToDamage = RANDOM_ATTRIBUTE,
 
 	forceAttack = true,
-	damageType = KINETIC_DAMAGE,
+	damageType = ELECTRICITY_DAMAGE,
 
 	range = 32
 }
