@@ -493,7 +493,7 @@ void SkillManager::surrenderAllSkills(CreatureObject* creature, bool notifyClien
 	for (int i = 0; i < copyOfList.size(); i++) {
 		Skill* skill = copyOfList.get(i);
 
-		if (skill->getSkillPointsRequired() > 0) {
+		if (skill->getSkillPointsRequired() >= 0 && !skill->getSkillName().contains("admin")) {
 			creature->removeSkill(skill, notifyClient);
 
 			//Remove skill modifiers
