@@ -381,7 +381,8 @@ public:
 		int durationBonus = (object->getSkillMod("force_meditate"));
 		
 		if (durationBonus > 0) {
-			duration = duration - durationBonus;
+			//duration = duration - durationBonus; once we add the proper modifier, turn this back on.
+			duration = 2;
 			object->sendSystemMessage("you got a bonus cool down");
 		}
 		
