@@ -55,12 +55,12 @@ int StartingLocationTerminalImplementation::handleObjectMenuSelect(CreatureObjec
     if (zone == NULL || zone->getZoneName() != "tutorial")
         return 1;
 
-    ManagedReference<SceneObject> cell = creature->getParent();
+    ManagedReference<SceneObject*> cell = player->getParent();
 
     if (cell == NULL)
         return 1;
 
-    ManagedReference<SceneObject> tutorial = cell->getParent();
+    ManagedReference<SceneObject*> tutorial = cell->getParent();
 
     String city = "coronet";
 
