@@ -49,6 +49,42 @@ int StartingLocationTerminalImplementation::handleObjectMenuSelect(CreatureObjec
 		}
 	}
 	
+	/*
+	Zone* zone = player->getZone();
+
+    if (zone == NULL || zone->getZoneName() != "tutorial")
+        return 1;
+
+    ManagedReference<SceneObject> cell = creature->getParent();
+
+    if (cell == NULL)
+        return 1;
+
+    ManagedReference<SceneObject> tutorial = cell->getParent();
+
+    String city = "coronet";
+
+    StartingLocation* startingLocation = server->getPlayerManager()->getStartingLocation(city);
+
+    if (startingLocation == NULL) {
+        player->info("Attempted to start at invalid starting location: " + city + ".", true);
+        return 1;
+    }
+
+    zone = server->getZoneServer()->getZone(startingLocation->getZoneName());
+
+    if (zone == NULL) {
+        player->sendSystemMessage("This starting location is disabled, please select a different one");
+        return 1;
+    }
+
+    player->switchZone(startingLocation->getZoneName(), startingLocation->getX(), startingLocation->getZ(), startingLocation->getY(), startingLocation->getCell());
+    player->setDirection(startingLocation->getHeading());
+
+    if (tutorial != NULL){
+		tutorial->destroyObjectFromDatabase(true);
+	}
+	*/
 	server->getPlayerManager()->sendStartingLocationsTo(player);
 
 	return 0;
