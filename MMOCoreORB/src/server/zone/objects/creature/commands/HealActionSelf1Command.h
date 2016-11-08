@@ -6,7 +6,7 @@
 #define HEALACTIONSELF1COMMAND_H_
 
 #include "server/zone/objects/scene/SceneObject.h"
-#include "ForceHealQueueCommand.h"
+#include "newForceHealQueueCommand.h"
 
 class HealActionSelf1Command : public ForceHealQueueCommand {
 	
