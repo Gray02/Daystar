@@ -33,9 +33,9 @@ public:
 
 		SkillManager* skillManager = SkillManager::instance();
 		skillManager->surrenderSkill(arguments.toString(), targetCreature, true);
-		bool skillGranted = skillManager->surrenderSkill(arguments.toString(), targetCreature, true, true, true);
+		bool skillGranted = skillManager->surrenderSkill(arguments.toString(), targetCreature, true);
 
-		if (skillGranted) {
+		if (targetCreature->hasSkill(skillGranted) {
 			StringIdChatParameter params;
 			params.setTO(arguments.toString());
 			params.setStringId("skill_teacher", "skill_terminal_grant");
