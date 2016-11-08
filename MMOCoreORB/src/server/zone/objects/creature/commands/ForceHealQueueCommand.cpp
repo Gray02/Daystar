@@ -175,7 +175,7 @@ int ForceHealQueueCommand::doHealHAM(CreatureObject* creature, CreatureObject* t
 	creature->sendSystemMessage("[doHealHAM] Healable HAM:" + String::valueOf(healableHAM));
 #endif
 	//Adding a skillmod to increase the value of the heal, as a test.
-	int bonusHeal = (creature->getSkillModifier("force_meditate"));
+	int bonusHeal = (creature->getSkillMod("force_meditate"));
 	
 	if (bonusHeal == 0) {
 		bonusHeal = 0;
