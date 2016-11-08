@@ -72,6 +72,7 @@ class PlayerObject extends IntangibleObject {
 
 	protected int reactionFines;
 	
+	
 	protected transient GalaxyAccountInfo galaxyAccountInfo;
 	
 	protected transient Account account;
@@ -717,7 +718,7 @@ class PlayerObject extends IntangibleObject {
 	 */
 	public native void sendBadgesResponseTo(CreatureObject player);
 	
-	public native void logout(boolean doLock);	
+	public native void logout(boolean doLock);
 	
 	public native void setJediState(int state, boolean notifyClient = true);
 	

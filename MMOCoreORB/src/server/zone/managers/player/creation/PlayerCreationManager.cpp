@@ -15,7 +15,6 @@
 #include "server/chat/room/ChatRoom.h"
 #include "server/login/account/Account.h"
 #include "server/zone/objects/player/sui/messagebox/SuiMessageBox.h"
-#include "server/zone/objects/player/sui/listbox/SuiListBox.h"
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/packets/MessageCallback.h"
 #include "server/zone/packets/charcreation/ClientCreateCharacterCallback.h"
