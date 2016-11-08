@@ -40,7 +40,7 @@ public:
 				return;
 			
 			
-			if (player->isBleeding() || player->isPoisoned() || player->isDiseased() && player->getSkillMod("force_meditate") >= 4) {
+			if ((player->isBleeding() || player->isPoisoned() || player->isDiseased()) && (player->getSkillMod("force_meditate") >= 4)) {
 				if (player->isBleeding())
 					player->healDot(CreatureState::BLEEDING, (15));
 				else if (player->isPoisoned())
