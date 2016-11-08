@@ -43,10 +43,7 @@
 
 ForceResistPoisonCommand = {
         name = "forceresistpoison",
-        forceCost = 250,
-        duration = 900,
-        --animationCRC = hashCode()
-        clientEffect = "clienteffect/pl_force_resist_poison_self.cef"
+
 }
 
 AddCommand(ForceResistPoisonCommand)
