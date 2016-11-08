@@ -39,7 +39,8 @@ public:
 			if (!player->isMeditating())
 				return;
 			
-			if (player->isBleeding() || player->isPoisoned() || player->isDiseased()) {
+			
+			if (player->isBleeding() || player->isPoisoned() || player->isDiseased() && player->getSkillMod("force_meditate") >= 4) {
 				if (player->isBleeding())
 					player->healDot(CreatureState::BLEEDING, (15));
 				else if (player->isPoisoned())
@@ -57,7 +58,7 @@ public:
 					woundedPools.add(i);
 			}
 					
-			if (woundedPools.size() > 0) {
+			if (woundedPools.size() > 0 && player->getSkillMod("force_meditate") >= 2) {
 				int heal = 30 + System::random(20);
 
 				// Select a random Attribute that has wounds...
@@ -77,17 +78,24 @@ public:
 			}
 				
 			int bf = player->getShockWounds();
-			if (bf > 9) {
+			if (bf > 9 && player->getSkillMod("force_meditate") >= 1) {
 				player->addShockWounds(-10, true);
 				player->sendSystemMessage("You heal 10 Battle Fatigue.");
-			} else if (bf < 10 && bf != 0) {
+			} else if (bf < 10 && bf != 0 && player->getSkillMod("force_meditate") >= 1) {
 				player->setShockWounds(0);
 				player->sendSystemMessage("You finish healing your Battle Fatigue.");
 			}
 
-			if (fmeditateTask != NULL)
+			ManagedReference<PlayerObject*> playerObject = player->getPlayerObject();
+			if (fmeditateTask != NULL) {
 				fmeditateTask->reschedule(10000);
 				player->playEffect("clienteffect/pl_force_meditate_self.cef", "");
+				int forceBonus = 100;
+				if (player->getSkillMod("force_meditate") >= 4 && (playerObject->getForcePower() + forceBonus) < playerObject->getForcePowerMax()) {
+					playerObject->setForcePower(playerObject->getForcePower() + forceBonus);
+					player->sendSystemMessage("You feel a surge of Force flow through you");
+				}
+			}
 
 		} catch (Exception& e) {
 			player->error("unreported exception caught in ForceMeditateTask::activate");
