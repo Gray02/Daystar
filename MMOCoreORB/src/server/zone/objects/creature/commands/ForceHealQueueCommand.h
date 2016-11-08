@@ -375,7 +375,17 @@ public:
 	}
 
 	float getCommandDuration(CreatureObject* object, const UnicodeString& arguments) const {
-		return defaultTime * 3.0;
+		
+		int duration = 3;
+		//This skill mod needs changed later.
+		int durationBonus = (object->getSkillMod("force_meditate"));
+		
+		if (durationBonus > 0) {
+			duration = duration - durationBonus;
+			object->sendSystemMessage("you got a bonus cool down");
+		}
+		
+		return duration;
 	}
 };
 

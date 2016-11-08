@@ -115,10 +115,10 @@ object_weapon_melee_special_vibroknuckler = object_weapon_melee_special_shared_v
 	maxRange = 3,
 	maxRangeAccuracy = 10,
 
-	minDamage = 20,
-	maxDamage = 120,
+	minDamage = 90,
+	maxDamage = 210,
 
-	attackSpeed = 2.6,
+	attackSpeed = 1.6,
 
 	woundsRatio = 8,
 

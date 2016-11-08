@@ -63,6 +63,11 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 		{
 			"Learn Skill",
 			{
+				"DayStar Jedi Testing",
+				{
+					"Skill Set 1", "force_sensitive_training_master",
+					"Skill Set 2", "jedi_padawan_master",
+				},			
 				"Architect",
 				{
 					"Novice", "crafting_architect_novice",
@@ -1519,11 +1524,13 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			"Clear DOTs", "clear_dots",
 			"Max XP", "max_xp",
 			"Become Glowy", "become_glowy",
+			"jedi saber", "object/weapon/melee/sword/crafted_saber/sword_lightsaber_one_handed_gen4.iff",
 			"Faction Points",
 			{
 				"Imperial", "faction_imperial",
 				"Rebel", "faction_rebel"
 			}
+			
 		},
 		"Items",
 		{
@@ -1633,11 +1640,11 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					"Backpack 01", "object/tangible/wearables/backpack/backpack_s01.iff"
 				}
 			},
-			--"Consumables",
-			--{
-			--	"Desserts",
-			--	{
-					--"Air Cake", "object/tangible/food/crafted/dessert_air_cake.iff",
+			"Consumables",
+			{
+				"Desserts",
+				{
+					"Air Cake", "object/tangible/food/crafted/dessert_air_cake.iff",
 					--"Almond Kwevvu Crisp Munchies", "object/tangible/food/crafted/dessert_almond_kwevvu_crisp_munchies.iff",
 					--"Bantha Butter", "object/tangible/food/crafted/dessert_bantha_butter.iff",
 					--"Blap Biscuit", "object/tangible/food/crafted/dessert_blap_biscuit.iff",
@@ -1645,7 +1652,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					--"Bofa Treat", "object/tangible/food/crafted/dessert_bofa_treat.iff",
 					--"Cavaellin Creams", "object/tangible/food/crafted/dessert_cavaellin_creams.iff",
 					--"Chandad", "object/tangible/food/crafted/dessert_chandad.iff",
-					--"Citros Snow Cake", "object/tangible/food/crafted/dessert_citros_snow_cake.iff",
+					"Citros Snow Cake", "object/tangible/food/crafted/dessert_citros_snow_cake.iff",
 					--"Corellian Fried Icecream", "object/tangible/food/crafted/dessert_corellian_fried_icecream.iff",
 					--"Deneelian Fizz Pudding", "object/tangible/food/crafted/dessert_deneelian_fizz_pudding.iff",
 					--"Dweezel", "object/tangible/food/crafted/dessert_dweezel.iff",
@@ -1669,7 +1676,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					--"Vagnerian Canape", "object/tangible/food/crafted/dessert_vagnerian_canape.iff",
 					--"Wedding Cake", "object/tangible/food/crafted/dessert_wedding_cake.iff",
 					--"Won Won", "object/tangible/food/crafted/dessert_won_won.iff",
-				--},
+				},
 				--"Dishes",
 				--{
 					--"Ahrisa", "object/tangible/food/crafted/dish_ahrisa.iff",
@@ -1796,7 +1803,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					--"Thruster Head", "object/tangible/food/spice/spice_thruster_head.iff",
 					--"Yarrock", "object/tangible/food/spice/spice_yarrock.iff"
 				--}
-			--},
+			},
 			"Deeds",
 			{
 				"Vehicle Deeds",

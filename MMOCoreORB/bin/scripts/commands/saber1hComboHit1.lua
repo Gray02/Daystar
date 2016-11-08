@@ -44,7 +44,7 @@
 Saber1hComboHit1Command = {
         name = "saber1hcombohit1",
 
-	damageMultiplier = 1.5,
+	damageMultiplier = 1,
 	speedMultiplier = 1.25,
 	healthCostMultiplier = 0,
 	actionCostMultiplier = 0,
@@ -54,10 +54,21 @@ Saber1hComboHit1Command = {
 
 	animation = "combo_3b", 
 	animType = GENERATE_INTENSITY,
+			stateEffects = {
+	   StateEffect( 
+		BLIND_EFFECT, 
+		{}, 
+		{ "blind_defense", "resistance_states" }, 
+		{ "jedi_state_defense" }, 
+		85, 
+		0, 
+		10
+	  )
+},
 
 	combatSpam = "saber1hcombohit1",
 
-	poolsToDamage = HEALTH_ATTRIBUTE + ACTION_ATTRIBUTE + MIND_ATTRIBUTE,
+	poolsToDamage = HEALTH_ATTRIBUTE,
 
 	weaponType = ONEHANDJEDIWEAPON,
 

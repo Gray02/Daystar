@@ -80,7 +80,7 @@ object_weapon_melee_sword_crafted_saber_sword_lightsaber_one_handed_gen4 = objec
 	xpType = "jedi_general",
 
 	-- See http://www.ocdsoft.com/files/certifications.xls
-	certificationsRequired = { "cert_onehandlightsaber_gen4" },
+	certificationsRequired = { "cert_onehandlightsaber_gen1" }, --change back to the 4 gen
 	-- See http://www.ocdsoft.com/files/accuracy.xls
 	creatureAccuracyModifiers = { "onehandlightsaber_accuracy" },
 
@@ -101,7 +101,7 @@ object_weapon_melee_sword_crafted_saber_sword_lightsaber_one_handed_gen4 = objec
 	healthAttackCost = 20,
 	actionAttackCost = 35,
 	mindAttackCost = 40,
-	forceCost = 40,
+	forceCost = 8,
 
 	pointBlankRange = 0,
 	pointBlankAccuracy = 20,
@@ -112,11 +112,14 @@ object_weapon_melee_sword_crafted_saber_sword_lightsaber_one_handed_gen4 = objec
 	maxRange = 5,
 	maxRangeAccuracy = 5,
 
-	attackSpeed = 4.5,	
+	attackSpeed = 3,	
 
 	woundsRatio = 37,
 
 	defenderToughnessModifiers = { "lightsaber_toughness" },
+	
+	minDamage = 200,
+	maxDamage = 400,
 	
 	noTrade = 1,
 	

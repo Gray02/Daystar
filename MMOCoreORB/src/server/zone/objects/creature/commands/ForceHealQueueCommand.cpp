@@ -174,16 +174,23 @@ int ForceHealQueueCommand::doHealHAM(CreatureObject* creature, CreatureObject* t
 #ifdef DEBUG_FORCE_HEALS
 	creature->sendSystemMessage("[doHealHAM] Healable HAM:" + String::valueOf(healableHAM));
 #endif
+	//Adding a skillmod to increase the value of the heal, as a test.
+	int bonusHeal = (creature->getSkillMod("force_meditate"));
+	
+	if (bonusHeal == 0) {
+		bonusHeal = 0;
+	}
+	
 	if (healableHAM & HEALTH) {
-		attrs.healedHealth = target->healDamage(creature, CreatureAttribute::HEALTH, healAmount);
+		attrs.healedHealth = target->healDamage(creature, CreatureAttribute::HEALTH, healAmount + bonusHeal);
 	}
 
 	if (healableHAM & ACTION) {
-		attrs.healedAction = target->healDamage(creature, CreatureAttribute::ACTION, healAmount);
+		attrs.healedAction = target->healDamage(creature, CreatureAttribute::ACTION, healAmount + bonusHeal);
 	}
 
 	if (healableHAM & MIND) {
-		attrs.healedMind = target->healDamage(creature, CreatureAttribute::MIND, healAmount);
+		attrs.healedMind = target->healDamage(creature, CreatureAttribute::MIND, healAmount + bonusHeal);
 	}
 
 	return SUCCESS;

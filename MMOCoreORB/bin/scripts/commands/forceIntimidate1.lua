@@ -45,9 +45,9 @@ ForceIntimidate1Command = {
 	name = "forceintimidate1",
 
 	damageMultiplier = 0,
-	speed = 4.0,
-	forceCost = 300,
-	accuracySkillMod = "forceintimidate_accuracy",
+	speed = 2.0,
+	forceCost = 100,
+	accuracySkillMod = "force_accuracy",
 	coneAngle = 30,
 	coneAction = true,
 	forceAttack = true,
@@ -61,7 +61,7 @@ ForceIntimidate1Command = {
 		{ "force_defense" },
 		100,
 		0,
-		60
+		20
 	  )
 	},
 

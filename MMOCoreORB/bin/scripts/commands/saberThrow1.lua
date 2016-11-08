@@ -44,7 +44,7 @@
 SaberThrow1Command = {
         name = "saberthrow1",                
 
-	damageMultiplier = 1.5,
+	damageMultiplier = 1,
 	speedMultiplier = 2.0,
 	healthCostMultiplier = 0,
 	actionCostMultiplier = 0,
@@ -54,6 +54,18 @@ SaberThrow1Command = {
 
 	animation = "saberthrow", 
 	animType = GENERATE_INTENSITY,
+	
+	stateEffects = {
+	   StateEffect( 
+		KNOCKDOWN_EFFECT, 
+		{ "knockdownRecovery", "lastKnockdown" }, 
+		{ "knockdown_defense" }, 
+		{}, 
+		75, 
+		0, 
+		0
+	  )
+},
 
 	combatSpam = "saberthrow1",
 

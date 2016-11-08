@@ -46,10 +46,10 @@ ForceThrow1Command = {
 
 	minDamage = 375,
 	maxDamage = 500,
-	speed = 4.0,
-	forceCost = 28,
+	speed = 2.0,
+	forceCost = 30,
 	visMod = 25,
-	accuracySkillMod = "forcethrow_accuracy",
+	accuracySkillMod = "force_accuracy",
 
 	stateEffects = {
 	  StateEffect(
@@ -71,7 +71,7 @@ ForceThrow1Command = {
 	poolsToDamage = RANDOM_ATTRIBUTE,
 
 	forceAttack = true,
-	damageType = KINETIC_DAMAGE,
+	damageType = ELECTRICITY_DAMAGE,
 
 	range = 32
 }
