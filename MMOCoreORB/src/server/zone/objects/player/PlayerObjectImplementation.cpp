@@ -1967,12 +1967,6 @@ void PlayerObjectImplementation::doForceRegen() {
 			modifier = 3;
 	}
 	
-	//This statement is to assist in testing, by allowing players to regen faster.
-	if (creature->isSitting()) {
-		modifier = 25;
-	}
-	//Ends testing statement
-
 	uint32 forceTick = tick * modifier;
 
 	if (forceTick > getForcePowerMax() - getForcePower()){   // If the player's Force Power is going to regen again and it's close to max,
