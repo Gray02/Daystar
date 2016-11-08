@@ -69,7 +69,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					"Jedi Padawan", "jedi_padawan_master",
 					"Jedi Apprentice", "jedi_apprentice_master",
 					"Jedi Knight LS", "jedi_knight_lightsaber_master",
-					"Dark Jedi Knight LS", "jedi_lord_lightsaber_master",
+					"Dark Jedi Knight LS", "jedi_lord_lightsaber_master"
 				},			
 				"Architect",
 				{
@@ -1532,12 +1532,12 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				"1h", "object/weapon/melee/sword/crafted_saber/sword_lightsaber_one_handed_gen4.iff",
 				"2h", "object/weapon/melee/2h_sword/crafted_saber/sword_lightsaber_two_handed_gen4.iff",
 				"Pole", "object/weapon/melee/polearm/crafted_saber/sword_lightsaber_polearm_gen4.iff"
-			}
+			},
 			"Jedi State",
 			{
 				"Lightside", "jedi_state_light",
 				"Darkside", "jedi_state_dark"
-			}
+			},
 			"Faction Points",
 			{
 				"Imperial", "faction_imperial",
