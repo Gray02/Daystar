@@ -8,11 +8,11 @@
 #include "server/zone/objects/scene/SceneObject.h"
 #include "newForceHealQueueCommand.h"
 
-class HealActionSelf1Command : public ForceHealQueueCommand {
+class HealActionSelf1Command : public newForceHealQueueCommand {
 	
 public:
 
-	HealActionSelf1Command(const String& name, ZoneProcessServer* server) : ForceHealQueueCommand(name, server) {}
+	HealActionSelf1Command(const String& name, ZoneProcessServer* server) : newForceHealQueueCommand(name, server) {}
 	
 	bool canPerformSkill(CreatureObject* creature) {
 		if (!creature->hasDamage(CreatureAttribute::ACTION)) {
