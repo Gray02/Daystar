@@ -521,6 +521,9 @@ void SkillManager::surrenderAllSkills(CreatureObject* creature, bool notifyClien
 
 				/// update force
 				ghost->setForcePowerMax(creature->getSkillMod("jedi_force_power_max"), true);
+				
+				//set their state to 0
+				ghost->setJediState(0);
 			}
 		}
 	}
