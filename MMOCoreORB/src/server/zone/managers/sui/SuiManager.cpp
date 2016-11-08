@@ -593,6 +593,12 @@ void SuiManager::handleCharacterBuilderSelectItem(CreatureObject* player, SuiBox
 
 			} else if (templatePath == "become_glowy") {
 				bluefrog->grantGlowyBadges(player);
+			
+			} else if (templatePath == "jedi_state_light") {
+				ghost->setJediState(4);
+
+			} else if (templatePath == "jedi_state_dark") {
+				ghost->setJediState(8);
 
 			} else {
 				if (templatePath.length() > 0) {
