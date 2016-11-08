@@ -935,6 +935,8 @@ void MissionManagerImplementation::randomizeGenericBountyMission(CreatureObject*
 		mission->setMissionTitle(stfFile + diffString, "m" + String::valueOf(randTexts) + "t");
 		mission->setMissionDescription(stfFile + diffString, "m" + String::valueOf(randTexts) + "d");
 	} else {
+		Locker listLocker(&playerBountyListMutex);
+
 		BountyTargetListElement* target = getRandomPlayerBounty(player);
 
 		if (target != NULL) {
@@ -1343,7 +1345,7 @@ void MissionManagerImplementation::randomizeGenericHuntingMission(CreatureObject
 		return;
 	}
 
-	String serverTemplate = templatesNames.get(0);
+	const String& serverTemplate = templatesNames.get(0);
 
 	SharedObjectTemplate* sharedTemplate = TemplateManager::instance()->getTemplate(serverTemplate.hashCode());
 
@@ -1523,9 +1525,7 @@ void MissionManagerImplementation::generateRandomFactionalDestroyMissionDescript
 	int randomMax;
 
 	if (player->getFaction() == Factions::FACTIONIMPERIAL || player->getFaction() == Factions::FACTIONREBEL) {
-		ManagedReference<PlayerObject*> ghost = player->getPlayerObject();
-
-		if (ghost->getFactionStatus() == FactionStatus::OVERT || ghost->getFactionStatus() == FactionStatus::COVERT) {
+		if (player->getFactionStatus() == FactionStatus::OVERT || player->getFactionStatus() == FactionStatus::COVERT) {
 			difficultyString += "_military";
 			randomMax = 49;
 		} else {
@@ -1611,9 +1611,7 @@ LairSpawn* MissionManagerImplementation::getRandomLairSpawn(CreatureObject* play
 			bool neutralMission = true;
 
 			if (player->getFaction() != 0 && player->getFaction() == faction) {
-				ManagedReference<PlayerObject*> ghost = player->getPlayerObject();
-
-				if (ghost->getFactionStatus() == FactionStatus::OVERT || ghost->getFactionStatus() == FactionStatus::COVERT) {
+				if (player->getFactionStatus() == FactionStatus::OVERT || player->getFactionStatus() == FactionStatus::COVERT) {
 					neutralMission = false;
 				}
 			}
@@ -1937,6 +1935,7 @@ void MissionManagerImplementation::completePlayerBounty(uint64 targetId, uint64 
 		}
 
 		playerBountyList.remove(playerBountyList.find(targetId));
+		delete target;
 	}
 }
 

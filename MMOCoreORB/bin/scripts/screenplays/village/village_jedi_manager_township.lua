@@ -57,6 +57,10 @@ function VillageJediManagerTownship.getCurrentPhase()
 end
 
 function VillageJediManagerTownship:switchToNextPhase()
+	if (not isZoneEnabled("dathomir")) then
+		rescheduleServerEvent("VillagePhaseChange", 60 * 60 * 1000)
+	end
+
 	local currentPhase = VillageJediManagerTownship.getCurrentPhase()
 	local phaseID = VillageJediManagerTownship.getCurrentPhaseID()
 	VillageJediManagerTownship:despawnMobiles(currentPhase)
@@ -89,7 +93,8 @@ function VillageJediManagerTownship:switchToNextPhase()
 	VillageJediManagerTownship:createVillageMasterObject()
 
 	if (currentPhase == 3 or currentPhase == 4) then
-		VillageRaids:doPhaseInit()
+		local pMaster = VillageJediManagerTownship:getMasterObject()
+		createEvent(60 * 1000, "VillageRaids", "doPhaseInit", pMaster, "")
 	end
 
 	Logger:log("Switching village phase to " .. currentPhase, LT_INFO)
@@ -105,14 +110,18 @@ end
 function VillageJediManagerTownship:start()
 	if (isZoneEnabled("dathomir")) then
 		Logger:log("Starting the Village Township Screenplay.", LT_INFO)
+
 		local currentPhase = VillageJediManagerTownship.getCurrentPhase()
 		VillageJediManagerTownship.setCurrentPhaseInit()
 		VillageJediManagerTownship:spawnMobiles(currentPhase, true)
 		VillageJediManagerTownship:spawnSceneObjects(currentPhase, true)
 		VillageJediManagerTownship:createVillageMasterObject()
+		
+		createNavMesh("dathomir", 5292, -4119, 210, true, "village_township")
 
 		if (currentPhase == 3 or currentPhase == 4) then
-			VillageRaids:doPhaseInit()
+			local pMaster = VillageJediManagerTownship:getMasterObject()
+			createEvent(60 * 1000, "VillageRaids", "doPhaseInit", pMaster, "")
 		end
 	end
 end
@@ -122,7 +131,7 @@ function VillageJediManagerTownship:createVillageMasterObject()
 	local pMaster = spawnSceneObject("dathomir", "object/tangible/spawning/quest_spawner.iff", 5291, 78.5, -4126, 0, 0)
 
 	if (pMaster == nil) then
-		printf("Error in VillageJediManagerTownship:createVillageObject(), unable to create master village object.\n")
+		printf("Error in VillageJediManagerTownship:createVillageMasterObject(), unable to create master village object.\n")
 		return
 	end
 
@@ -137,7 +146,7 @@ function VillageJediManagerTownship:destroyVillageMasterObject()
 	end
 
 	SceneObject(pMaster):destroyObjectFromWorld()
-	
+
 	local phaseID = VillageJediManagerTownship.getCurrentPhaseID()
 	deleteData("Village:masterID:" .. phaseID)
 end
@@ -283,6 +292,8 @@ function VillageJediManagerTownship:doOnlinePhaseChangeFails(pCreature, currentP
 	elseif (currentPhase == 2) then
 		FsReflex2:doPhaseChangeFail(pCreature)
 		FsSad:doPhaseChangeFail(pCreature)
+	elseif (currentPhase == 4) then
+		FsVillageDefense:doPhaseChangeFail(pCreature)
 	end
 end
 

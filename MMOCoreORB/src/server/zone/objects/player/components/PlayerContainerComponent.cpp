@@ -41,15 +41,13 @@ int PlayerContainerComponent::canAddObject(SceneObject* sceneObject, SceneObject
 
 		if (creo->isPlayerCreature()) {
 			if (!wearable->isNeutral()) {
-				ManagedReference<PlayerObject*> playerObject = creo->getPlayerObject();
-
-				if (wearable->isImperial() && (playerObject->getFactionStatus() == FactionStatus::ONLEAVE || !creo->isImperial())) {
+				if (wearable->isImperial() && (creo->getFactionStatus() == FactionStatus::ONLEAVE || !creo->isImperial())) {
 					errorDescription = "You lack the necessary requirements to wear this object";
 
 					return TransferErrorCode::PLAYERUSEMASKERROR;
 				}
 
-				if (wearable->isRebel() && (playerObject->getFactionStatus() == FactionStatus::ONLEAVE || !creo->isRebel())) {
+				if (wearable->isRebel() && (creo->getFactionStatus() == FactionStatus::ONLEAVE || !creo->isRebel())) {
 					errorDescription = "You lack the necessary requirements to wear this object";
 
 					return TransferErrorCode::PLAYERUSEMASKERROR;
@@ -69,13 +67,13 @@ int PlayerContainerComponent::canAddObject(SceneObject* sceneObject, SceneObject
 
 		if (object->isWearableObject()) {
 			if (tanoData != NULL) {
-				Vector<String> skillsRequired = tanoData->getCertificationsRequired();
+				const Vector<String>& skillsRequired = tanoData->getCertificationsRequired();
 
 				if (skillsRequired.size() > 0) {
 					bool hasSkill = false;
 
 					for (int i = 0; i < skillsRequired.size(); i++) {
-						String skill = skillsRequired.get(i);
+						const String& skill = skillsRequired.get(i);
 
 						if (!skill.isEmpty() && creo->hasSkill(skill)) {
 							hasSkill = true;

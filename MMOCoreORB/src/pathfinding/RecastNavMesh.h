@@ -23,8 +23,12 @@ class RecastNavMesh : public Object, Logger {
 
 public:
 	RecastNavMesh(const String& filename, bool forceRebuild=false);
-	RecastNavMesh() {
+	RecastNavMesh() : header() {
 		navMesh = NULL;
+	}
+
+	~RecastNavMesh() {
+		dtFreeNavMesh(navMesh);
 	}
 
 	void reloadNavmesh() {

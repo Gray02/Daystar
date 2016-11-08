@@ -44,7 +44,7 @@ void CellPortal::readObject(IffStream* iff) {
 }
 
 CellProperty::CellProperty() : Object(), Logger("CellProperty"), numberOfPortals(0),
-	floorMesh(NULL), appearanceTemplate(NULL), cellID(0) {
+	floorMesh(NULL), appearanceTemplate(NULL), cellID(0), boundingVolume(NULL) {
 
 }
 
@@ -93,15 +93,6 @@ void CellProperty::loadVersion5(IffStream* iffStream) {
 			appearanceTemplate = app;
 		} else {
 			info("Error reading mesh " + meshFile, true);
-		}
-		DetailAppearanceTemplate* mesh = dynamic_cast<DetailAppearanceTemplate*>(app);
-		MeshAppearanceTemplate* meshAppearance = dynamic_cast<MeshAppearanceTemplate*>(app);
-		if (mesh != NULL) {
-			meshAppearance = (MeshAppearanceTemplate*) mesh->getFirstMesh();
-			if (meshAppearance == NULL)
-				error("ClientProperty loaded appearance other than MeshAppearanceTemplate " + meshFile);
-		} else if (meshAppearance == NULL) {
-			error("CellProperty not a detailappearancetemplate " + meshFile);
 		}
 	}
 

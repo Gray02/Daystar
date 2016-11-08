@@ -56,6 +56,7 @@
 #include "server/zone/managers/creature/AiMap.h"
 #include "server/zone/managers/creature/CreatureTemplateManager.h"
 #include "server/zone/managers/faction/FactionManager.h"
+#include "server/zone/managers/gcw/GCWManager.h"
 #include "server/zone/managers/name/NameManager.h"
 #include "server/zone/managers/stringid/StringIdManager.h"
 #include "server/zone/packets/object/CombatAction.h"
@@ -181,7 +182,7 @@ void AiAgentImplementation::loadTemplateData(CreatureTemplate* templateData) {
 		Vector<String> wepgroups = npcTemplate->getWeapons();
 
 		for (int i = 0; i < wepgroups.size(); ++i) {
-			Vector<String> weptemps = CreatureTemplateManager::instance()->getWeapons(wepgroups.get(i));
+			const Vector<String>& weptemps = CreatureTemplateManager::instance()->getWeapons(wepgroups.get(i));
 
 			for (int i = 0; i < weptemps.size(); ++i) {
 				uint32 crc = weptemps.get(i).hashCode();
@@ -534,6 +535,10 @@ bool AiAgentImplementation::runAwarenessLogicCheck(SceneObject* pObject) {
 //	--if SceneObject(pObject):isAiAgent() then AiAgent(pAgent):info("Passed target invisible check") end
 
 	checkForReactionChat(pObject);
+
+	if (getCreatureBitmask() & CreatureFlag::SCANNING_FOR_CONTRABAND) {
+		getZone()->getGCWManager()->runCrackdownScan(asAiAgent(), creoObject);
+	}
 
 	Reference<SceneObject*> follow = getFollowObject().get();
 
@@ -1662,7 +1667,7 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 			SceneObject* currentCell = getParent().get();
 			if (currentCell != NULL && !currentCell->isCellObject())
 				currentCell = NULL;
-				
+
 			// Don't recalculate path if mob hasn't entered the target cell yet (we already checked to make sure the target is still in the same cell)
 			if (currentCell == targetCoordinateCell && currentFoundPath->get(currentFoundPath->size() - 1).getWorldPosition().distanceTo(targetPosition.getCoordinates().getWorldPosition()) > 3) {
 				// Our target has moved, so we will need a new path with a new position.
@@ -2363,7 +2368,7 @@ int AiAgentImplementation::inflictDamage(TangibleObject* attacker, int damageTyp
 	lastDamageReceived.updateToCurrentTime();
 
 	activateRecovery();
-	
+
 	if (attacker->isCreatureObject()) {
 		CreatureObject* creature = attacker->asCreatureObject();
 
@@ -2667,7 +2672,7 @@ bool AiAgentImplementation::isAggressiveTo(CreatureObject* target) {
 		if (ghost == NULL && (targetFaction != getFaction()))
 			return true;
 		// this is the same thing, but ensures that if the target is a player, that they aren't on leave
-		else if (ghost != NULL && (targetFaction != getFaction()) && ghost->getFactionStatus() != FactionStatus::ONLEAVE)
+		else if (ghost != NULL && (targetFaction != getFaction()) && target->getFactionStatus() != FactionStatus::ONLEAVE)
 			return true;
 	}
 
@@ -3159,12 +3164,8 @@ bool AiAgentImplementation::isAttackableBy(CreatureObject* object) {
 			return false;
 		}
 
-		if (object->isPlayerCreature()) {
-			PlayerObject* ghost = object->getPlayerObject();
-
-			if (targetFaction == 0 || (ghost != NULL && ghost->getFactionStatus() == FactionStatus::ONLEAVE)) {
+		if (object->isPlayerCreature() && (targetFaction == 0 || (object->getFactionStatus() == FactionStatus::ONLEAVE))) {
 				return false;
-			}
 		}
 	}
 
@@ -3285,4 +3286,16 @@ void AiAgentImplementation::setConvoTemplate(const String& templateString) {
 	}
 
 	convoTemplateCRC = templateCRC;
+}
+
+void AiAgentImplementation::setCreatureBit(uint32 option) {
+	if (!(creatureBitmask & option)) {
+		creatureBitmask = creatureBitmask | option;
+	}
+}
+
+void AiAgentImplementation::clearCreatureBit(uint32 option) {
+	if (creatureBitmask & option) {
+		creatureBitmask = creatureBitmask & ~option;
+	}
 }

@@ -345,10 +345,12 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	lua_register(luaEngine->getLuaState(), "getControllingFaction", getControllingFaction);
 	lua_register(luaEngine->getLuaState(), "getImperialScore", getImperialScore);
 	lua_register(luaEngine->getLuaState(), "getRebelScore", getRebelScore);
+	lua_register(luaEngine->getLuaState(), "getWinningFactionDifficultyScaling", getWinningFactionDifficultyScaling);
 	lua_register(luaEngine->getLuaState(), "playClientEffectLoc", playClientEffectLoc);
 	lua_register(luaEngine->getLuaState(), "getQuestVectorMap", getQuestVectorMap);
 	lua_register(luaEngine->getLuaState(), "createQuestVectorMap", createQuestVectorMap);
 	lua_register(luaEngine->getLuaState(), "removeQuestVectorMap", removeQuestVectorMap);
+	lua_register(luaEngine->getLuaState(), "creatureTemplateExists", creatureTemplateExists);
 
 	//Navigation Mesh Management
 	lua_register(luaEngine->getLuaState(), "createNavMesh", createNavMesh);
@@ -381,7 +383,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->setGlobalInt("OBJECTNAMECHANGED", ObserverEventType::OBJECTNAMECHANGED);
 	luaEngine->setGlobalInt("SURVEY", ObserverEventType::SURVEY);
 	luaEngine->setGlobalInt("GETATTRIBUTESBATCHCOMMAND", ObserverEventType::GETATTRIBUTESBATCHCOMMAND);
-	luaEngine->setGlobalInt("HEALINGPERFORMED", ObserverEventType::HEALINGPERFORMED);
+	luaEngine->setGlobalInt("HEALINGRECEIVED", ObserverEventType::HEALINGRECEIVED);
 	luaEngine->setGlobalInt("STARTCOMBAT", ObserverEventType::STARTCOMBAT);
 	luaEngine->setGlobalInt("DEFENDERADDED", ObserverEventType::DEFENDERADDED);
 	luaEngine->setGlobalInt("DEFENDERDROPPED", ObserverEventType::DEFENDERDROPPED);
@@ -450,8 +452,9 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->setGlobalInt("TEF", CreatureFlag::TEF);
 	luaEngine->setGlobalInt("PLAYER", CreatureFlag::PLAYER);
 	luaEngine->setGlobalInt("ENEMY", CreatureFlag::ENEMY);
-	luaEngine->setGlobalInt("CHANGEFACTIONSTATUS", CreatureFlag::CHANGEFACTIONSTATUS);
-	luaEngine->setGlobalInt("BLINK_GREEN", CreatureFlag::BLINK_GREEN);
+	luaEngine->setGlobalInt("WILLBEDECLARED", CreatureFlag::WILLBEDECLARED);
+	luaEngine->setGlobalInt("WASDECLARED", CreatureFlag::WASDECLARED);
+	luaEngine->setGlobalInt("SCANNING_FOR_CONTRABAND", CreatureFlag::SCANNING_FOR_CONTRABAND);
 
 	luaEngine->setGlobalInt("CONVERSABLE", OptionBitmask::CONVERSE);
 	luaEngine->setGlobalInt("AIENABLED", OptionBitmask::AIENABLED);
@@ -1288,11 +1291,11 @@ int DirectorManager::spatialMoodChat(lua_State* L) {
 	if (lua_isuserdata(L, -3)) {
 		StringIdChatParameter* message = (StringIdChatParameter*)lua_touserdata(L, -3);
 
-		chatManager->broadcastChatMessage(creature, *message, 0, moodType, chatType);
+		chatManager->broadcastChatMessage(creature, *message, 0, chatType, moodType);
 	} else {
 		String message = lua_tostring(L, -3);
 
-		chatManager->broadcastChatMessage(creature, message, 0, moodType, chatType);
+		chatManager->broadcastChatMessage(creature, message, 0, chatType, moodType);
 	}
 
 	return 0;
@@ -3035,6 +3038,31 @@ int DirectorManager::getRebelScore(lua_State* L) {
 	return 1;
 }
 
+int DirectorManager::getWinningFactionDifficultyScaling(lua_State* L) {
+	if (checkArgumentCount(L, 1) == 1) {
+		instance()->error("incorrect number of arguments passed to DirectorManager::getWinningFactionDifficultyScaling");
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		return 0;
+	}
+
+	String zoneName = lua_tostring(L, -1);
+
+	Zone* zone = ServerCore::getZoneServer()->getZone(zoneName);
+	if (zone == NULL) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+
+	GCWManager* gcwMan = zone->getGCWManager();
+	if (gcwMan == NULL) {
+		lua_pushinteger(L, 0);
+	} else {
+		lua_pushinteger(L, gcwMan->getWinningFactionDifficultyScaling());
+	}
+
+	return 1;
+}
+
 int DirectorManager::playClientEffectLoc(lua_State* L) {
 	uint64 playerId = lua_tointeger(L, -7);
 	String effect = lua_tostring(L, -6);
@@ -3226,4 +3254,22 @@ int DirectorManager::createNavMesh(lua_State *L) {
     }, "create_lua_navmesh", 1000);
     lua_pushlightuserdata(L, navmeshRegion);
     return 1;
+}
+
+
+
+int DirectorManager::creatureTemplateExists(lua_State* L) {
+	if (checkArgumentCount(L, 1) == 1) {
+		instance()->error("incorrect number of arguments passed to DirectorManager::creatureTemplateExists");
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		return 0;
+	}
+
+	String templateName = lua_tostring(L, -1);
+
+	bool result = CreatureTemplateManager::instance()->getTemplate(templateName) != NULL;
+
+	lua_pushboolean(L, result);
+
+	return 1;
 }

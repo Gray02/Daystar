@@ -189,11 +189,11 @@ public:
 		this->trails = trails;
 	}
 
-	String getCombatSpam() const {
+	const String& getCombatSpam() const {
 		return combatSpam;
 	}
 
-	void setCombatSpam(String spam) {
+	void setCombatSpam(const String& spam) {
 		this->combatSpam = spam;
 	}
 

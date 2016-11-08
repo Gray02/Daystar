@@ -11,24 +11,15 @@ CityScreenPlay = ScreenPlay:new {
 function CityScreenPlay:spawnGcwMobiles()
 	if (isZoneEnabled(self.planet)) then
 		local controllingFaction = getControllingFaction(self.planet)
-
-		if controllingFaction == FACTIONNEUTRAL then
-			local rand = getRandomNumber(1, 2)
-
-			if rand == 1 then
-				controllingFaction = FACTIONIMPERIAL
-			else
-				controllingFaction = FACTIONREBEL
-			end
-		end
+		local difficulty = getWinningFactionDifficultyScaling(self.planet)
 
 		for i = 1, #self.gcwMobs do
-			self:spawnMob(i, controllingFaction)
+			self:spawnMob(i, controllingFaction, difficulty)
 		end
 	end
 end
 
-function CityScreenPlay:spawnMob(num, controllingFaction)
+function CityScreenPlay:spawnMob(num, controllingFaction, difficulty)
 	local mobsTable = self.gcwMobs
 
 	if num <= 0 or num > #mobsTable then
@@ -37,18 +28,31 @@ function CityScreenPlay:spawnMob(num, controllingFaction)
 
 	local mobTable = mobsTable[num]
 	local pNpc = nil
+	local npcTemplate = ""
+	local npcMood = ""
 
 	if controllingFaction == FACTIONIMPERIAL then
-		pNpc = spawnMobile(self.planet, mobTable[1], 0, mobTable[3], mobTable[4], mobTable[5], mobTable[6], mobTable[7])
-
-		if pNpc ~= nil and mobTable[8] ~= "" then
-			self:setMoodString(pNpc, mobTable[8])
-		end
+		npcTemplate = mobTable[1]
+		npcMood = mobTable[8]
 	elseif controllingFaction == FACTIONREBEL then
-		pNpc = spawnMobile(self.planet, mobTable[2], 0, mobTable[3], mobTable[4], mobTable[5], mobTable[6], mobTable[7])
+		npcTemplate = mobTable[2]
+		npcMood = mobTable[9]
+	end
 
-		if pNpc ~= nil and mobTable[9] ~= "" then
-			self:setMoodString(pNpc, mobTable[9])
+	local scaling = ""
+	if difficulty > 1 and creatureTemplateExists(npcTemplate .. "_hard") then
+		scaling = "_hard"
+	end
+
+	pNpc = spawnMobile(self.planet, npcTemplate .. scaling, 0, mobTable[3], mobTable[4], mobTable[5], mobTable[6], mobTable[7])
+
+	if pNpc ~= nil then
+		if npcMood ~= "" then
+			self:setMoodString(pNpc, npcMood)
+		end
+		if mobTable[10] then
+			local aiAgent = AiAgent(pNpc)
+			aiAgent:setCreatureBit(SCANNING_FOR_CONTRABAND)
 		end
 	end
 
@@ -68,27 +72,15 @@ function CityScreenPlay:onDespawn(pAiAgent)
 	local mobNumber = readData(oid)
 	deleteData(oid)
 
-	local controllingFaction = getControllingFaction(self.planet)
-
-	if controllingFaction == FACTIONNEUTRAL then
-		controllingFaction = TangibleObject(pAiAgent):getFaction()
-	end
-
-	local args = mobNumber .. "," .. controllingFaction
-	createEvent(300000, self.screenplayName, "respawn", nil, args)
+	createEvent(300000, self.screenplayName, "respawn", nil, tostring(mobNumber))
 
 	return 1
 end
 
 function CityScreenPlay:respawn(pAiAgent, args)
-	local mobNumber = 0
-	local controllingFaction = 0
-	local comma = string.find(args, ",")
+	local mobNumber = tonumber(args)
+	local controllingFaction = getControllingFaction(self.planet)
+	local difficulty = getWinningFactionDifficultyScaling(self.planet)
 
-	if comma ~= nil then
-		mobNumber = tonumber(string.sub(args, 1, comma - 1))
-		controllingFaction = tonumber(string.sub(args, comma + 1))
-	end
-
-	self:spawnMob(mobNumber, controllingFaction)
+	self:spawnMob(mobNumber, controllingFaction, difficulty)
 end

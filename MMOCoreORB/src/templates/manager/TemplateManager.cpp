@@ -623,8 +623,8 @@ void TemplateManager::registerGlobals() {
 	luaTemplatesInstance->setGlobalInt("TEF", CreatureFlag::TEF);
 	luaTemplatesInstance->setGlobalInt("PLAYER", CreatureFlag::PLAYER);
 	luaTemplatesInstance->setGlobalInt("ENEMY", CreatureFlag::ENEMY);
-	luaTemplatesInstance->setGlobalInt("CHANGEFACTIONSTATUS", CreatureFlag::CHANGEFACTIONSTATUS);
-	luaTemplatesInstance->setGlobalInt("BLINK_GREEN", CreatureFlag::BLINK_GREEN);
+	luaTemplatesInstance->setGlobalInt("WILLBEDECLARED", CreatureFlag::WILLBEDECLARED);
+	luaTemplatesInstance->setGlobalInt("WASDECLARED", CreatureFlag::WASDECLARED);
 
 	luaTemplatesInstance->setGlobalInt("CONVERSABLE", OptionBitmask::CONVERSE);
 	luaTemplatesInstance->setGlobalInt("AIENABLED", OptionBitmask::AIENABLED);
@@ -671,9 +671,9 @@ void TemplateManager::registerGlobals() {
 	luaTemplatesInstance->setGlobalInt("PLAYERCLONED", ObserverEventType::PLAYERCLONED);
 	luaTemplatesInstance->setGlobalInt("CRAFTINGASSEMBLY", ObserverEventType::CRAFTINGASSEMBLY);
 	luaTemplatesInstance->setGlobalInt("CRAFTINGEXPERIMENTATION", ObserverEventType::CRAFTINGEXPERIMENTATION);
-	luaTemplatesInstance->setGlobalInt("HEALINGPERFORMED", ObserverEventType::HEALINGPERFORMED);
+	luaTemplatesInstance->setGlobalInt("HEALINGRECEIVED", ObserverEventType::HEALINGRECEIVED);
 	luaTemplatesInstance->setGlobalInt("ENHANCINGPERFORMED", ObserverEventType::ENHANCINGPERFORMED);
-	luaTemplatesInstance->setGlobalInt("WOUNDHEALINGPERFORMED", ObserverEventType::WOUNDHEALINGPERFORMED);
+	luaTemplatesInstance->setGlobalInt("WOUNDHEALINGRECEIVED", ObserverEventType::WOUNDHEALINGRECEIVED);
 	luaTemplatesInstance->setGlobalInt("XPAWARDED", ObserverEventType::XPAWARDED);
 	luaTemplatesInstance->setGlobalInt("SPICEDOWNERACTIVATED", ObserverEventType::SPICEDOWNERACTIVATED);
 	luaTemplatesInstance->setGlobalInt("MEDPACKUSED", ObserverEventType::MEDPACKUSED);

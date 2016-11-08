@@ -98,7 +98,7 @@ public:
 		}else {
 			// are we in a cantina? we have a private medical rating so either thats form a droid or camp or hospital
 			ManagedReference<SceneObject*> root = enhancer->getRootParent();
-			if (root != NULL && root->isStaticObject()) {
+			if (root != NULL && root->isClientObject()) {
 				uint32 gameObjectType = root->getGameObjectType();
 				switch (gameObjectType) {
 						case SceneObjectType::RECREATIONBUILDING:
@@ -111,7 +111,7 @@ public:
 		}
 
 		if (enhancer->isInCombat()) {
-			enhancer->sendSystemMessage("You cannot do that while in Combat.");
+			enhancer->sendSystemMessage("You cannot HealEnhance yourself while in Combat.");
 			return false;
 		}
 
@@ -121,7 +121,7 @@ public:
 		}
 
 		if (patient->isInCombat()) {
-			enhancer->sendSystemMessage("You cannot do that while your target is in Combat.");
+			enhancer->sendSystemMessage("You cannot HealEnhance your target while they are still in Combat.");
 			return false;
 		}
 
@@ -131,7 +131,7 @@ public:
 		}
 
 		if (enhancer != patient && !CollisionManager::checkLineOfSight(enhancer, patient)) {
-			enhancer->sendSystemMessage("@container_error_message:container18");
+			enhancer->sendSystemMessage("@healing:no_line_of_sight"); // You cannot see your target.
 			return false;
 		}
 

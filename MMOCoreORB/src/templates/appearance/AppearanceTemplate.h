@@ -92,11 +92,8 @@ public:
 	}
 
 	virtual ~AppearanceTemplate() {
-
-	}
-
-	virtual AppearanceTemplate* getFirstMesh() {
-		return NULL;
+		delete volume;
+		delete collisionVolume;
 	}
 
 	virtual Vector <Reference<MeshData*>> getTransformedMeshData(const Matrix4& parentTransform) const = 0;

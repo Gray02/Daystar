@@ -121,7 +121,9 @@ public:
 	void onFail(uint32 actioncntr, CreatureObject* creature, uint32 errorNumber) const {
 		// evidence shows that this has a custom OOR message.
 		if (errorNumber == TOOFAR) {
-			creature->sendSystemMessage("@cbt_spam:out_of_range_single"); // That target is out of range.
+			creature->sendSystemMessage("@error_message:target_out_of_range"); //Your target is out of range for this action.
+			CombatSpam* spam = new CombatSpam(creature, NULL, creature, NULL, 0, "cbt_spam", "out_of_range", 10); // That target is out of range. (red)
+			creature->sendMessage(spam);
 			QueueCommand::onFail(actioncntr, creature, GENERALERROR);
 		} else {
 			QueueCommand::onFail(actioncntr, creature, errorNumber);
@@ -166,36 +168,28 @@ public:
 
 				ManagedReference<TangibleObject*> targetTano = targetObject.castTo<TangibleObject*>();
 
-				if (targetTano != NULL && creature->getFaction() != 0 && targetTano->getFaction() != 0 && targetTano->getFaction() != creature->getFaction() && ghost->getFactionStatus() != FactionStatus::OVERT) {
+				if (targetTano != NULL && creature->getFaction() != 0 && targetTano->getFaction() != 0 && targetTano->getFaction() != creature->getFaction() && creature->getFactionStatus() != FactionStatus::OVERT) {
 					if (targetTano->isCreatureObject()) {
 						ManagedReference<CreatureObject*> targetCreature = targetObject.castTo<CreatureObject*>();
 
 						if (targetCreature != NULL) {
 							if (targetCreature->isPlayerCreature()) {
-								if (!CombatManager::instance()->areInDuel(creature, targetCreature)) {
-									PlayerObject* targetGhost = targetCreature->getPlayerObject();
-
-									if (targetGhost != NULL && targetGhost->getFactionStatus() == FactionStatus::OVERT) {
+								if (!CombatManager::instance()->areInDuel(creature, targetCreature) && targetCreature->getFactionStatus() == FactionStatus::OVERT) {
 										ghost->doFieldFactionChange(FactionStatus::OVERT);
-									}
 								}
 							} else if (targetCreature->isPet()) {
 								ManagedReference<CreatureObject*> targetOwner = targetCreature->getLinkedCreature().get();
 
-								if (targetOwner != NULL && !CombatManager::instance()->areInDuel(creature, targetOwner)) {
-									PlayerObject* targetGhost = targetOwner->getPlayerObject();
-
-									if (targetGhost != NULL && targetGhost->getFactionStatus() == FactionStatus::OVERT) {
+								if (targetOwner != NULL && !CombatManager::instance()->areInDuel(creature, targetOwner) && targetOwner->getFactionStatus() == FactionStatus::OVERT) {
 										ghost->doFieldFactionChange(FactionStatus::OVERT);
-									}
 								}
 							} else {
-								if (ghost->getFactionStatus() == FactionStatus::ONLEAVE)
+								if (creature->getFactionStatus() == FactionStatus::ONLEAVE)
 									ghost->doFieldFactionChange(FactionStatus::COVERT);
 							}
 						}
 					} else {
-						if (ghost->getFactionStatus() == FactionStatus::ONLEAVE && !(targetTano->getPvpStatusBitmask() & CreatureFlag::OVERT))
+						if (creature->getFactionStatus() == FactionStatus::ONLEAVE && !(targetTano->getPvpStatusBitmask() & CreatureFlag::OVERT))
 							ghost->doFieldFactionChange(FactionStatus::COVERT);
 						else if ((targetTano->getPvpStatusBitmask() & CreatureFlag::OVERT))
 							ghost->doFieldFactionChange(FactionStatus::OVERT);
@@ -217,7 +211,7 @@ public:
 			return TOOCLOSE;
 
 		if (!CollisionManager::checkLineOfSight(creature, targetObject)) {
-			creature->sendSystemMessage("@container_error_message:container18");
+			creature->sendSystemMessage("@cbt_spam:los_fail"); // "You lost sight of your target."
 			return GENERALERROR;
 		}
 
@@ -229,7 +223,7 @@ public:
 
 				if (!perms->hasInheritPermissionsFromParent()) {
 					if (!targetCell->checkContainerPermission(creature, ContainerPermissions::WALKIN)) {
-						creature->sendSystemMessage("@container_error_message:container18");
+						creature->sendSystemMessage("@combat_effects:cansee_fail"); // You cannot see your target.
 						return GENERALERROR;
 					}
 				}
@@ -331,7 +325,7 @@ public:
 		return range;
 	}
 
-	inline String getAccuracySkillMod() const {
+	inline const String& getAccuracySkillMod() const {
 		return accuracySkillMod;
 	}
 
@@ -427,7 +421,7 @@ public:
 		this->areaRange = i;
 	}
 
-	void setEffectString(String s) {
+	void setEffectString(const String& s) {
 		this->effectString = s;
 	}
 
@@ -447,7 +441,7 @@ public:
 		return animType;
 	}
 
-	String getAnimationString() const {
+	const String& getAnimationString() const {
 		return animation;
 	}
 
@@ -554,11 +548,11 @@ public:
 		return generateAnimation(hitLocation, ((uint32)weapon->getMaxDamage()) >> 2, damage);
 	}
 
-	inline String getEffectString() const {
+	inline const String& getEffectString() const {
 		return effectString;
 	}
 
-	inline String getCombatSpam() const {
+	inline const String& getCombatSpam() const {
 		return combatSpam;
 	}
 
@@ -574,11 +568,11 @@ public:
 		return &(const_cast<CombatQueueCommand*>(this)->dotEffects);
 	}
 
-	void setAnimationString(String anim) {
+	void setAnimationString(const String& anim) {
 		this->animation = anim;
 	}
 
-	void setCombatSpam(String combatSpam) {
+	void setCombatSpam(const String& combatSpam) {
 		this->combatSpam = combatSpam;
 	}
 
@@ -594,11 +588,11 @@ public:
 		stateEffects.put(stateEffect.getEffectType(), stateEffect);
 	}
 
-	StateEffect getStateEffect(uint8 type) const {
+	const StateEffect& getStateEffect(uint8 type) const {
 		return const_cast<CombatQueueCommand*>(this)->stateEffects.get(type);
 	}
 
-	void setDotEffects(Vector<DotEffect> dotEffects) {
+	void setDotEffects(const Vector<DotEffect>& dotEffects) {
 		this->dotEffects = dotEffects;
 	}
 
@@ -626,7 +620,7 @@ public:
 		this->damageType = dm;
 	}
 
-	void addDotEffect(DotEffect dotEffect) {
+	void addDotEffect(const DotEffect& dotEffect) {
 		dotEffects.add(dotEffect);
 	}
 
@@ -638,7 +632,7 @@ public:
 		this->range = i;
 	}
 
-	void setAccuracySkillMod(String acc) {
+	void setAccuracySkillMod(const String& acc) {
 		this->accuracySkillMod = acc;
 	}
 

@@ -485,103 +485,6 @@ void PlayerObjectImplementation::awardBadge(uint32 badge) {
 	playerManager->awardBadge(_this.getReferenceUnsafeStaticCast(), badge);
 }
 
-void PlayerObjectImplementation::setFactionStatus(int status) {
-	factionStatus = status;
-
-	CreatureObject* creature = cast<CreatureObject*>(getParent().get().get());
-
-	if (creature == NULL)
-		return;
-
-	uint32 pvpStatusBitmask = creature->getPvpStatusBitmask();
-
-	if (factionStatus == FactionStatus::COVERT) {
-		creature->sendSystemMessage("@faction_recruiter:covert_complete");
-
-		if (pvpStatusBitmask & CreatureFlag::OVERT)
-			pvpStatusBitmask -= CreatureFlag::OVERT;
-
-		if (pvpStatusBitmask & CreatureFlag::CHANGEFACTIONSTATUS)
-			pvpStatusBitmask -= CreatureFlag::CHANGEFACTIONSTATUS;
-
-		/*if (pvpStatusBitmask & CreatureFlag::BLINK_GREEN)
-			pvpStatusBitmask -= CreatureFlag::BLINK_GREEN;*/
-
-		creature->setPvpStatusBitmask(pvpStatusBitmask);
-	} else if (factionStatus == FactionStatus::OVERT) {
-
-		if(!(pvpStatusBitmask & CreatureFlag::OVERT)) {
-			int cooldown = 300;
-
-			Zone* creoZone = creature->getZone();
-			if (creoZone != NULL) {
-				GCWManager* gcwMan = creoZone->getGCWManager();
-
-				if (gcwMan != NULL)
-					cooldown = gcwMan->getOvertCooldown();
-			}
-
-			creature->addCooldown("declare_overt_cooldown", cooldown * 1000);
-			pvpStatusBitmask |= CreatureFlag::OVERT;
-		}
-
-		if (pvpStatusBitmask & CreatureFlag::CHANGEFACTIONSTATUS)
-			pvpStatusBitmask -= CreatureFlag::CHANGEFACTIONSTATUS;
-
-		/*if (pvpStatusBitmask & CreatureFlag::BLINK_GREEN)
-			pvpStatusBitmask -= CreatureFlag::BLINK_GREEN;*/
-
-		creature->sendSystemMessage("@faction_recruiter:overt_complete");
-
-		creature->setPvpStatusBitmask(pvpStatusBitmask);
-	} else if (factionStatus == FactionStatus::ONLEAVE) {
-		if (pvpStatusBitmask & CreatureFlag::OVERT)
-			pvpStatusBitmask -= CreatureFlag::OVERT;
-
-		if (pvpStatusBitmask & CreatureFlag::CHANGEFACTIONSTATUS)
-			pvpStatusBitmask -= CreatureFlag::CHANGEFACTIONSTATUS;
-
-		/*if (pvpStatusBitmask & CreatureFlag::BLINK_GREEN)
-			pvpStatusBitmask -= CreatureFlag::BLINK_GREEN;*/
-
-		if (creature->getFaction() != 0)
-			creature->sendSystemMessage("@faction_recruiter:on_leave_complete");
-
-		creature->setPvpStatusBitmask(pvpStatusBitmask);
-	}
-
-	Vector<ManagedReference<CreatureObject*> > petsToStore;
-
-	for (int i = 0; i < getActivePetsSize(); i++) {
-		Reference<AiAgent*> pet = getActivePet(i);
-
-		if (pet == NULL)
-			continue;
-
-		CreatureTemplate* creatureTemplate = pet->getCreatureTemplate();
-
-		if (creatureTemplate != NULL) {
-			String templateFaction = creatureTemplate->getFaction();
-
-			if (!templateFaction.isEmpty() && factionStatus == FactionStatus::ONLEAVE) {
-				petsToStore.add(pet.castTo<CreatureObject*>());
-				creature->sendSystemMessage("You're no longer the right faction status for one of your pets, storing...");
-				continue;
-			}
-		}
-
-		if (pvpStatusBitmask & CreatureFlag::PLAYER)
-			pvpStatusBitmask &= ~CreatureFlag::PLAYER;
-
-		pet->setPvpStatusBitmask(pvpStatusBitmask);
-	}
-
-	StoreSpawnedChildrenTask* task = new StoreSpawnedChildrenTask(creature, petsToStore);
-	task->execute();
-
-	updateInRangeBuildingPermissions();
-}
-
 int PlayerObjectImplementation::addExperience(const String& xpType, int xp, bool notifyClient) {
 	if (xp == 0)
 		return 0;
@@ -1329,7 +1232,7 @@ void PlayerObjectImplementation::notifyOnline() {
 	}
 
 	for (int i = 0; i < friendList.size(); ++i) {
-		String name = friendList.get(i);
+		const String& name = friendList.get(i);
 		ManagedReference<CreatureObject*> player = chatManager->getPlayer(name);
 
 		if (player != NULL) {
@@ -1668,9 +1571,6 @@ void PlayerObjectImplementation::doRecovery(int latency) {
 			if (targetObject != NULL) {
 				if (targetObject->isInRange(creature, MAX(10, creature->getWeapon()->getMaxRange()) + targetObject->getTemplateRadius() + creature->getTemplateRadius())) {
 					creature->executeObjectControllerAction(STRING_HASHCODE("attack"), creature->getTargetID(), "");
-				} else {
-					CombatSpam* spam = new CombatSpam(creature, NULL, creature, NULL, 0, "cbt_spam", "out_of_range", 2); // That target is out of range. (red)
-					creature->sendMessage(spam);
 				}
 
 				// as long as the target is still valid, we still want to continue to queue auto attacks
@@ -2639,19 +2539,17 @@ bool PlayerObjectImplementation::hasEventPerk(const String& templatePath) {
 }
 
 void PlayerObjectImplementation::doFieldFactionChange(int newStatus) {
-	int curStatus = getFactionStatus();
-
-	if (curStatus == FactionStatus::OVERT || curStatus == newStatus)
-		return;
-
 	Reference<CreatureObject*> parent = getParent().get().castTo<CreatureObject*>();
 
 	if (parent == NULL)
 		return;
 
-	uint32 pvpStatusBitmask = parent->getPvpStatusBitmask();
+	int curStatus = parent->getFactionStatus();
 
-	if (pvpStatusBitmask & CreatureFlag::CHANGEFACTIONSTATUS)
+	if (curStatus == FactionStatus::OVERT || curStatus == newStatus)
+		return;
+
+	if (parent->getFutureFactionStatus() != FactionStatus::ONLEAVE)
 		return;
 
 	if (hasSuiBoxWindowType(SuiWindowType::FIELD_FACTION_CHANGE))

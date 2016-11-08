@@ -1080,7 +1080,7 @@ int CreatureObjectImplementation::healDamage(TangibleObject* healer,
 	setHAM(damageType, newValue, notifyClient);
 
 	if(healer != NULL && notifyObservers) {
-		asCreatureObject()->notifyObservers(ObserverEventType::HEALINGPERFORMED, healer, returnValue);
+		asCreatureObject()->notifyObservers(ObserverEventType::HEALINGRECEIVED, healer, returnValue);
 	}
 
 	return returnValue;
@@ -1107,7 +1107,7 @@ int CreatureObjectImplementation::healWound(TangibleObject* healer,
 	setWounds(damageType, newValue, notifyClient);
 
 	if (healer != NULL && notifyObservers) {
-		asCreatureObject()->notifyObservers(ObserverEventType::WOUNDHEALINGPERFORMED, healer, returnValue);
+		asCreatureObject()->notifyObservers(ObserverEventType::WOUNDHEALINGRECEIVED, healer, returnValue);
 	}
 
 	return returnValue;
@@ -2906,7 +2906,7 @@ bool CreatureObjectImplementation::isAttackableBy(TangibleObject* object, bool b
 		return false;
 
 	// if player is on leave, then faction object cannot attack it
-	if (ghost->getFactionStatus() == FactionStatus::ONLEAVE || getFaction() == 0)
+	if (getFactionStatus() == FactionStatus::ONLEAVE || getFaction() == 0)
 		return false;
 
 	// if tano is overt, creature must be overt
@@ -2961,11 +2961,8 @@ bool CreatureObjectImplementation::isAttackableBy(CreatureObject* object, bool b
 
 		if(getFaction() == 0 || getFaction() == object->getFaction())
 			return false;
-		else if (isPlayerCreature()) {
-
-			if(getPlayerObject() == NULL || getPlayerObject()->getFactionStatus() == FactionStatus::ONLEAVE)
-				return false;
-		}
+		else if (isPlayerCreature() && getFactionStatus() == FactionStatus::ONLEAVE)
+			return false;
 
 		return true;
 	}
@@ -2991,7 +2988,7 @@ bool CreatureObjectImplementation::isAttackableBy(CreatureObject* object, bool b
 		return true;
 	}
 
-	if (isInBountyMission(object, asCreatureObject())) {
+	if (object->hasBountyMissionFor(asCreatureObject())) {
 		return true;
 	}
 
@@ -3022,21 +3019,13 @@ bool CreatureObjectImplementation::isHealableBy(CreatureObject* object) {
 
 	//if ((pvpStatusBitmask & CreatureFlag::OVERT) && (object->getPvpStatusBitmask() & CreatureFlag::OVERT) && object->getFaction() != getFaction())
 
-	PlayerObject* targetGhost = getPlayerObject();
+	CreatureObject* targetCreo = asCreatureObject();
 
-	if (isPet()) {
-		ManagedReference<CreatureObject*> owner = getLinkedCreature().get();
-		if (owner != NULL)
-			targetGhost = owner->getPlayerObject();
-		else
-			targetGhost = NULL;
-	}
+	if (isPet())
+		targetCreo = getLinkedCreature().get();
 
-	if (targetGhost == NULL)
-		return true;
-
-	uint32 targetFactionStatus = targetGhost->getFactionStatus();
-	uint32 currentFactionStatus = ghost->getFactionStatus();
+	uint32 targetFactionStatus = targetCreo->getFactionStatus();
+	uint32 currentFactionStatus = object->getFactionStatus();
 
 	if (getFaction() != object->getFaction() && !(targetFactionStatus == FactionStatus::ONLEAVE))
 		return false;
@@ -3050,29 +3039,24 @@ bool CreatureObjectImplementation::isHealableBy(CreatureObject* object) {
 	return true;
 }
 
-bool CreatureObjectImplementation::isInBountyMission(CreatureObject* bountyHunter, CreatureObject* target) {
-	if (bountyHunter == NULL) {
+bool CreatureObjectImplementation::hasBountyMissionFor(CreatureObject* target) {
+	if (target == NULL)
 		return false;
-	}
 
-	ZoneServer* zoneServer = bountyHunter->getZoneServer();
+	ZoneServer* zoneServer = asCreatureObject()->getZoneServer();
 
-	if (zoneServer == NULL) {
+	if (zoneServer == NULL)
 		return false;
-	}
 
 	MissionManager* missionManager = zoneServer->getMissionManager();
 
-	if (missionManager == NULL) {
+	if (missionManager == NULL)
 		return false;
-	}
 
+	ManagedReference<MissionObject*> mission = missionManager->getBountyHunterMission(asCreatureObject());
 
-	ManagedReference<MissionObject*> mission = missionManager->getBountyHunterMission(bountyHunter);
-
-	if (mission == NULL || target == NULL) {
+	if (mission == NULL)
 		return false;
-	}
 
 	return mission->getTargetObjectId() == target->getObjectID();
 }

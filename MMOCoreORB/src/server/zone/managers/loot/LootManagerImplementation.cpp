@@ -194,8 +194,8 @@ void LootManagerImplementation::setInitialObjectStats(LootItemTemplate* template
 		Vector<short>* prec = tanoTemplate->getExperimentalPrecision();
 
 		for (int i = 0; i < props->size(); ++i) {
-			String title = titles->get(i);
-			String property = props->get(i);
+			const String& title = titles->get(i);
+			const String& property = props->get(i);
 
 			if (craftingValues->hasProperty(property))
 				continue;
@@ -210,7 +210,7 @@ void LootManagerImplementation::setInitialObjectStats(LootItemTemplate* template
 	Vector<Vector<int> >* customizationValues = templateObject->getCustomizationValues();
 
 	for (int i = 0; i < customizationData->size(); ++i) {
-		String customizationString = customizationData->get(i);
+		const String& customizationString = customizationData->get(i);
 		Vector<int>* values = &customizationValues->get(i);
 
 		if (values->size() > 0) {
@@ -222,7 +222,7 @@ void LootManagerImplementation::setInitialObjectStats(LootItemTemplate* template
 }
 
 void LootManagerImplementation::setCustomObjectName(TangibleObject* object, LootItemTemplate* templateObject) {
-	String customName = templateObject->getCustomObjectName();
+	const String& customName = templateObject->getCustomObjectName();
 
 	if (!customName.isEmpty()) {
 		if (customName.charAt(0) == '@') {
@@ -252,7 +252,7 @@ TangibleObject* LootManagerImplementation::createLootObject(LootItemTemplate* te
 	if(level > 300)
 		level = 300;
 
-	String directTemplateObject = templateObject->getDirectObjectTemplate();
+	const String& directTemplateObject = templateObject->getDirectObjectTemplate();
 
 	ManagedReference<TangibleObject*> prototype = zoneServer->createObject(directTemplateObject.hashCode(), 2).castTo<TangibleObject*>();
 
@@ -695,40 +695,39 @@ bool LootManagerImplementation::createLoot(SceneObject* container, const String&
 bool LootManagerImplementation::createLootSet(SceneObject* container, const String& lootGroup, int level, bool maxCondition, int setSize) {
 	Reference<LootGroupTemplate*> group = lootGroupMap->getLootGroupTemplate(lootGroup);
 
-		if (group == NULL) {
-			warning("Loot group template requested does not exist: " + lootGroup);
+	if (group == NULL) {
+		warning("Loot group template requested does not exist: " + lootGroup);
+		return false;
+	}
+	//Roll for the item out of the group.
+	int roll = System::random(10000000);
+
+	int lootGroupEntryIndex = group->getLootGroupIntEntryForRoll(roll);
+
+	for(int q = 0; q < setSize; q++) {
+		String selection = group->getLootGroupEntryAt(lootGroupEntryIndex+q);
+		Reference<LootItemTemplate*> itemTemplate = lootGroupMap->getLootItemTemplate(selection);
+
+		if (itemTemplate == NULL) {
+			warning("Loot item template requested does not exist: " + group->getLootGroupEntryForRoll(roll) + " for templateName: " + group->getTemplateName());
 			return false;
 		}
-		//Roll for the item out of the group.
-		int roll = System::random(10000000);
 
+		TangibleObject* obj = createLootObject(itemTemplate, level, maxCondition);
 
-		int lootGroupEntryIndex = group->getLootGroupIntEntryForRoll(roll);
+		if (obj == NULL)
+			return false;
 
-
-		for(int q = 0; q< setSize; q++) {
-			String selection = group->getLootGroupEntryAt(lootGroupEntryIndex+q);
-			Reference<LootItemTemplate*> itemTemplate = lootGroupMap->getLootItemTemplate(selection);
-
-			if (itemTemplate == NULL) {
-				warning("Loot item template requested does not exist: " + group->getLootGroupEntryForRoll(roll) + " for templateName: " + group->getTemplateName());
-				return false;
-			}
-
-			TangibleObject* obj = createLootObject(itemTemplate, level, maxCondition);
-
-			if (obj == NULL)
-				return false;
-
-			if (container->transferObject(obj, -1, false, true)) {
-				container->broadcastObject(obj, true);
-			} else {
-				obj->destroyObjectFromDatabase(true);
-				return false;
-			}
-
+		if (container->transferObject(obj, -1, false, true)) {
+			container->broadcastObject(obj, true);
+		} else {
+			obj->destroyObjectFromDatabase(true);
+			return false;
 		}
-		return true;
+
+	}
+
+	return true;
 }
 
 void LootManagerImplementation::addStaticDots(TangibleObject* object, LootItemTemplate* templateObject, int level) {
@@ -769,8 +768,8 @@ void LootManagerImplementation::addStaticDots(TangibleObject* object, LootItemTe
 
 			for (int i = 0; i < size; i++) {
 
-				String property = dotValues->elementAt(i).getKey();
-				SortedVector<int> theseValues = dotValues->elementAt(i).getValue();
+				const String& property = dotValues->elementAt(i).getKey();
+				const SortedVector<int>& theseValues = dotValues->elementAt(i).getValue();
 				int min = theseValues.elementAt(0);
 				int max = theseValues.elementAt(1);
 				float value = 0;

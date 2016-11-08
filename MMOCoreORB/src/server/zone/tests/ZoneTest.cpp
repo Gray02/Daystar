@@ -15,6 +15,12 @@
 #include "conf/ConfigManager.h"
 #include "server/zone/managers/player/PlayerManager.h"
 
+using ::testing::_;
+using ::testing::Return;
+using ::testing::AnyNumber;
+using ::testing::TypedEq;
+using ::testing::An;
+
 class ZoneTest : public ::testing::Test {
 protected:
 	Reference<ZoneServer*> zoneServer;
@@ -53,8 +59,14 @@ public:
 		return object;
 	}
 
-	Reference<ActiveArea*> createActiveArea() {
-		Reference<ActiveArea*> activeArea = new ActiveArea();
+	Reference<ActiveArea*> createActiveArea(bool mock = false) {
+		Reference<ActiveArea*> activeArea;
+
+		if (mock) {
+			activeArea = new MockActiveArea();
+		} else {
+			activeArea = new ActiveArea();
+		}
 		setDefaultComponents(activeArea);
 		activeArea->_setObjectID(nextObjectId.increment());
 
@@ -98,6 +110,55 @@ TEST_F(ZoneTest, TreLoad) {
 		TemplateManager::instance()->loadLuaTemplates();
 		ASSERT_EQ(TemplateManager::ERROR_CODE, 0);
 	}
+}
+
+TEST_F(ZoneTest, ActiveAreaTest) {
+	Reference<MockActiveArea*> activeArea = createActiveArea(true).castTo<MockActiveArea*>();
+	EXPECT_CALL(*activeArea, enqueueEnterEvent(_)).Times(AnyNumber());
+	EXPECT_CALL(*activeArea, enqueueExitEvent(_)).Times(AnyNumber());
+
+	Locker alocker(activeArea);
+
+	activeArea->setRadius(128);
+	activeArea->initializePosition(0, 0, 0);
+
+	zone->transferObject(activeArea, -1);
+
+	alocker.release();
+
+	Reference<TangibleObject*> tano = createTangibleObject();
+
+	Locker slocker(tano);
+
+	tano->initializePosition(0, 0, 0);
+
+	ASSERT_EQ(tano->getActiveAreasSize(), 0);
+
+	zone->transferObject(tano, -1);
+
+	ASSERT_EQ(tano->getActiveAreasSize(), 1);
+
+	tano->teleport(200, 0, 0);
+
+	ASSERT_EQ(tano->getActiveAreasSize(), 0);
+
+	tano->teleport(120, 0, 0);
+
+	ASSERT_EQ(tano->getActiveAreasSize(), 1);
+
+	slocker.release();
+
+	Locker blocker(activeArea);
+
+	activeArea->destroyObjectFromWorld(false);
+
+	blocker.release();
+
+	Locker s2locker(tano);
+
+	ASSERT_EQ(tano->getActiveAreasSize(), 0);
+
+	tano->destroyObjectFromWorld(false);
 }
 
 TEST_F(ZoneTest, InRangeTest) {
@@ -158,51 +219,4 @@ TEST_F(ZoneTest, InRangeTest) {
 	zone->getInRangeObjects(1000, 1000, 128, &objects, true);
 
 	ASSERT_EQ(objects.size(), 0);
-}
-
-TEST_F(ZoneTest, ActiveAreaTest) {
-	Reference<ActiveArea*> activeArea = createActiveArea();
-
-	Locker alocker(activeArea);
-
-	activeArea->setRadius(128);
-	activeArea->initializePosition(0, 0, 0);
-
-	zone->transferObject(activeArea, -1);
-
-	alocker.release();
-
-	Reference<TangibleObject*> tano = createTangibleObject();
-
-	Locker slocker(tano);
-
-	tano->initializePosition(0, 0, 0);
-
-	ASSERT_EQ(tano->getActiveAreasSize(), 0);
-
-	zone->transferObject(tano, -1);
-
-	ASSERT_EQ(tano->getActiveAreasSize(), 1);
-
-	tano->teleport(200, 0, 0);
-
-	ASSERT_EQ(tano->getActiveAreasSize(), 0);
-
-	tano->teleport(120, 0, 0);
-
-	ASSERT_EQ(tano->getActiveAreasSize(), 1);
-
-	slocker.release();
-
-	Locker blocker(activeArea);
-
-	activeArea->destroyObjectFromWorld(false);
-
-	blocker.release();
-
-	Locker s2locker(tano);
-
-	ASSERT_EQ(tano->getActiveAreasSize(), 0);
-
-	tano->destroyObjectFromWorld(false);
 }

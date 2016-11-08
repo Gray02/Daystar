@@ -66,29 +66,42 @@ Vector<CreatureObject*> TurretDataComponent::getAvailableTargets(bool aggroOnly)
 }
 
 CreatureObject* TurretDataComponent::selectTarget() {
-	Vector<CreatureObject*> targets = getAvailableTargets(true);
+	ManagedReference<TangibleObject*> turret = cast<TangibleObject*>(getParent());
 
-	if (targets.size() == 0)
+	if (turret == NULL)
 		return NULL;
 
-	return targets.get(System::random(targets.size() - 1));
+	ManagedReference<CreatureObject*> lastTarget = lastAutoTarget.get();
+
+	bool isVillageTurret = turret->getObjectTemplate()->getFullTemplateString().contains("turret_fs_village");
+
+	if (!isVillageTurret || (lastTarget == NULL || !checkTarget(lastTarget, turret, true))) {
+		lastAutoTarget = NULL;
+
+		Vector<CreatureObject*> targets = getAvailableTargets(true);
+
+		if (targets.size() == 0)
+			return NULL;
+
+		lastTarget = targets.get(System::random(targets.size() - 1));
+		lastAutoTarget = lastTarget;
+	}
+
+	return lastTarget;
 }
 
 bool TurretDataComponent::checkTarget(CreatureObject* creature, TangibleObject* turret, bool aggroOnly) {
 	if (creature == NULL || turret == NULL)
 		return false;
 
-	if (!creature->isAttackableBy(turret) || !turret->isInRange(creature, maxRange)) {
+	if (!creature->isAttackableBy(turret) || !turret->isInRange(creature, maxRange))
 		return false;
-	}
 
-	if (aggroOnly && !turret->hasDefender(creature) && !turret->isAggressiveTo(creature)) {
+	if (aggroOnly && !turret->hasDefender(creature) && !turret->isAggressiveTo(creature))
 		return false;
-	}
 
-	if (!CollisionManager::checkLineOfSight(creature, turret)) {
+	if (!CollisionManager::checkLineOfSight(creature, turret))
 		return false;
-	}
 
 	return true;
 }
