@@ -5,8 +5,8 @@
  *      Author: swgemu
  */
 
-#ifndef FORCEHEALQUEUECOMMAND_H_
-#define FORCEHEALQUEUECOMMAND_H_
+#ifndef NEWFORCEHEALQUEUECOMMAND_H_
+#define NEWFORCEHEALQUEUECOMMAND_H_
 
 
 #include "server/zone/objects/scene/SceneObject.h"
@@ -14,12 +14,12 @@
 #include "server/zone/managers/stringid/StringIdManager.h"
 #include "QueueCommand.h"
 
-class ForceHealQueueCommand : public QueueCommand {
+class newForceHealQueueCommand : public QueueCommand {
 protected:
 	float forceCost;
 
 public:
-	ForceHealQueueCommand(const String& name, ZoneProcessServer* server)
+	newForceHealQueueCommand(const String& name, ZoneProcessServer* server)
 : QueueCommand(name, server) {
 		forceCost = 0;
 	}
@@ -117,4 +117,4 @@ public:
 };
 
 
-#endif /* FORCEHEALQUEUECOMMAND_H_ */
+#endif /* NEWFORCEHEALQUEUECOMMAND_H_ */
