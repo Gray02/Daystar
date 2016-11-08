@@ -44,24 +44,24 @@
 ForceLightningSingle2Command = {
 	name = "forcelightningsingle2",
 
-	minDamage = 1500,
-	maxDamage = 2000,
-	speed = 4.0,
-	forceCost = 150,
+	minDamage = 750,
+	maxDamage = 1000,
+	speed = 2.0,
+	forceCost = 25,
 	visMod = 25,
-	accuracySkillMod = "forcelightning_accuracy",
+	accuracySkillMod = "force_accuracy",
 
 	stateEffects = {
 	  StateEffect(
 		STUN_EFFECT,
 		{},
-		{},
 		{ "jedi_state_defense" },
-		30,
+		{},
+		65,
 		0,
 		10
 	  )
-	},
+},
 
 	animation = "force_lightning_1_particle_level_3",
 	animType = GENERATE_INTENSITY,
