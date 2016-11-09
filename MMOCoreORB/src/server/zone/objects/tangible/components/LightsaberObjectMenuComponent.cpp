@@ -28,9 +28,6 @@ void LightsaberObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObj
 	String text = "@jedi_spam:open_saber";
 	menuResponse->addRadialMenuItem(89, 3, text);
 	
-	String fix = "Fix";
-	menuResponse->addRadialMenuItem(90, 3, fix);
-
 }
 
 int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject, CreatureObject* player, byte selectedID) const {
