@@ -95,8 +95,8 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 		attackSpeed = templateAttackSpeed;
 	
 	//test to add different colors for NPC sabers
-	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-	bladeColor = weapon->getBladeColor();
+	//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+	//bladeColor = weapon->getBladeColor();
 	//if (bladeColor > 0) {
 	//	weapon->setCustomizationVariable("/private/index_color_blade", saberColor, true);
 	//}
@@ -627,15 +627,15 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 	setMindAttackCost((int)values->getCurrentValue("attackmindcost"));
 	
 	//modified for 2nd statement
-	if (isJediWeapon() && getBladeColor() == 0) {
+	if (isJediWeapon()) { //&& getBladeColor() == 0) {
 		setForceCost((int)values->getCurrentValue("forcecost"));
 		setBladeColor(31);
 	}
 	//get the value then push it to the color
-	if (isJediWeapon() && getBladeColor() > 0) {
-		setForceCost((int)values->getCurrentValue("forcecost"));
-		setBladeColor((int)values->getCurrentValue("bladeColor"));
-	}
+	//if (isJediWeapon() && getBladeColor() > 0) {
+	//	setForceCost((int)values->getCurrentValue("forcecost"));
+	//	setBladeColor((int)values->getCurrentValue("bladeColor"));
+	//}
 
 	value = values->getCurrentValue("woundchance");
 	if (value != ValuesMap::VALUENOTFOUND)
