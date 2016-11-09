@@ -630,6 +630,11 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 		setForceCost((int)values->getCurrentValue("forcecost"));
 		setBladeColor(31);
 	}
+	//im tired, but i think this may work
+	int random = (System::random(11));
+	if (!isJediWeapon()) {
+		setBladeColor(random);
+	}
 
 	value = values->getCurrentValue("woundchance");
 	if (value != ValuesMap::VALUENOTFOUND)
