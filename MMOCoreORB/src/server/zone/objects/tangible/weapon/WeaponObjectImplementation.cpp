@@ -94,15 +94,13 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 	if (templateAttackSpeed > 1)
 		attackSpeed = templateAttackSpeed;
 	
-	bladeColor = weaponTemplate->getBladeColor();
-	
-	/*test to add different colors for NPC sabers
+	//test to add different colors for NPC sabers
 	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-	int saberColor = 0;
-	if (saberColor > 0) {
-		weapon->setCustomizationVariable("/private/index_color_blade", saberColor, true);
-	}
-	end test*/
+	bladeColor = weapon->getBladeColor();
+	//if (bladeColor > 0) {
+	//	weapon->setCustomizationVariable("/private/index_color_blade", saberColor, true);
+	//}
+	//end test
 
 	if (!isJediWeapon()) {
 		setSliceable(true);
