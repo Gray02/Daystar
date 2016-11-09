@@ -104,6 +104,9 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 
 	if (!isJediWeapon()) {
 		setSliceable(true);
+		//im tired, but i think this may work
+		int random = (System::random(11));
+		setBladeColor(random);
 	} else if (isJediWeapon()) {
 		setSliceable(false);
 	}
@@ -630,12 +633,7 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 		setForceCost((int)values->getCurrentValue("forcecost"));
 		setBladeColor(31);
 	}
-	//im tired, but i think this may work
-	int random = (System::random(11));
-	if (!isJediWeapon()) {
-		setBladeColor(random);
-	}
-
+	
 	value = values->getCurrentValue("woundchance");
 	if (value != ValuesMap::VALUENOTFOUND)
 		setWoundsRatio(value);
