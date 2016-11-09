@@ -109,6 +109,9 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 		setBladeColor(random);
 	} else if (isJediWeapon()) {
 		setSliceable(false);
+		//trying to see if this even works??
+		int random = (System::random(11));
+		setBladeColor(random);
 	}
 }
 
