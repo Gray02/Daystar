@@ -78,7 +78,7 @@ SharedWeaponObjectTemplate = SharedTangibleObjectTemplate:new {
 	xpType = "",
 	
 	--saberColor test
-	saberColor = 0;
+	saberColor = 0,
 	
 	creatureAccuracyModifiers = { },
 	defenderDefenseModifiers = { },
