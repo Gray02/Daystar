@@ -98,7 +98,7 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
 	int saberColor = 0;
 	if (saberColor > 0) {
-		weaponTemplate->setCustomizationVariable("/private/index_color_blade", saberColor, true);
+		weapon->setCustomizationVariable("/private/index_color_blade", saberColor, true);
 	}
 	//end test
 
