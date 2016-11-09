@@ -41,7 +41,7 @@ feral_force_wielder = Creature:new {
 			}
 		}
 	},
-	weapons = {"mixed_force_weapons"},
+	weapons = {"light_jedi_weapons"},--{"mixed_force_weapons"}, testing
 	conversationTemplate = "",
 	attacks = merge(pikemanmaster,brawlermaster)
 }
