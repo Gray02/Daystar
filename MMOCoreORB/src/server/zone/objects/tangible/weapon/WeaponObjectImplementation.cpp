@@ -94,7 +94,7 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 	if (templateAttackSpeed > 1)
 		attackSpeed = templateAttackSpeed;
 	
-	saberColor = weaponTemplate->getBladeColor();
+	bladeColor = weaponTemplate->getBladeColor();
 	
 	/*test to add different colors for NPC sabers
 	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
@@ -636,7 +636,7 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 	//get the value then push it to the color
 	if (isJediWeapon() && getBladeColor() > 0) {
 		setForceCost((int)values->getCurrentValue("forcecost"));
-		setBladeColor((int)values->getCurrentValue("saberColor"));
+		setBladeColor((int)values->getCurrentValue("bladeColor"));
 	}
 
 	value = values->getCurrentValue("woundchance");
