@@ -94,9 +94,7 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 	if (templateAttackSpeed > 1)
 		attackSpeed = templateAttackSpeed;
 	
-	if (isNpcJediWeapon()) {
-		setBladeColor(5);
-	}
+	int bladeColor = weaponTemplate->getBladeColor();
 	
 	if (!isJediWeapon()) {
 		setSliceable(true);
