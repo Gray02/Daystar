@@ -38,6 +38,10 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 	if(speedSlice > 1.0 || speedSlice < .5) {
 		speedSlice = 1;
 	}
+	
+	if (bladeColor >= 0) {
+		setBladeColor(bladeColor);
+	}
 }
 
 void WeaponObjectImplementation::notifyLoadFromDatabase() {
@@ -95,10 +99,6 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 		attackSpeed = templateAttackSpeed;
 	
 	int bladeColor = weaponTemplate->getBladeColor();
-	
-	if (bladeColor >= 0) {
-		setBladeColor(bladeColor);
-	}
 	
 	if (!isJediWeapon()) {
 		setSliceable(true);
