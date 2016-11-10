@@ -42,7 +42,8 @@
 
 
 object_weapon_melee_sword_base_lightsaber_base = object_weapon_melee_sword_base_shared_lightsaber_base:new {
-	weaponType = ONEHANDJEDIWEAPON,
+	--weaponType = ONEHANDJEDIWEAPON,
+	weaponType = ONEHANDMELEEWEAPON,
 
 }
 
