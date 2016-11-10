@@ -598,12 +598,6 @@ int WeaponObjectImplementation::getMindAttackCost(bool withPup) {
 	return mindAttackCost;
 }
 
-int WeaponObjectImplementation::setBladeColor(int value) {
-	setBladeColor(value);
-	
-	return bladeColor;
-}
-
 void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bool firstUpdate) {
 	/*
 	 * Incoming Values:					Ranges:
@@ -782,6 +776,7 @@ void WeaponObjectImplementation::decay(CreatureObject* user) {
 bool WeaponObjectImplementation::isEquipped() {
 	ManagedReference<SceneObject*> parent = getParent().get();
 	if (parent != NULL && parent->isPlayerCreature())
+		setBladeColor(bladeColor);
 		return true;
 
 	return false;
