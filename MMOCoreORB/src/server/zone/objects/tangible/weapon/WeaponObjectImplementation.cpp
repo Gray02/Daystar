@@ -38,10 +38,6 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 	if(speedSlice > 1.0 || speedSlice < .5) {
 		speedSlice = 1;
 	}
-	
-	if (bladeColor >= 0) {
-		setBladeColor(bladeColor);
-	}
 }
 
 void WeaponObjectImplementation::notifyLoadFromDatabase() {
@@ -840,4 +836,12 @@ PowerupObject* WeaponObjectImplementation::removePowerup() {
 	removeMagicBit(true);
 
 	return pup;
+}
+
+int WeaponObjectImplementation::getBladeColor() {
+		return bladeColor;
+}
+	
+void WeaponObjectImplementation::setBladeColor(int value) {
+		bladeColor = value;
 }
