@@ -95,23 +95,17 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 		attackSpeed = templateAttackSpeed;
 	
 	//test to add different colors for NPC sabers
-	//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-	//bladeColor = weapon->getBladeColor();
-	//if (bladeColor > 0) {
-	//	weapon->setCustomizationVariable("/private/index_color_blade", saberColor, true);
-	//}
+	bladeColor = weaponTemplate->getBladeColor();
+	if (bladeColor != 31) {
+		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
+	}
 	//end test
 
 	if (!isJediWeapon()) {
 		setSliceable(true);
-		//im tired, but i think this may work
-		int random = (System::random(11));
-		setBladeColor(random);
+
 	} else if (isJediWeapon()) {
 		setSliceable(false);
-		//trying to see if this even works??
-		int random = (System::random(11));
-		setBladeColor(random);
 	}
 }
 
@@ -370,7 +364,7 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	// Force Cost
 	if (getForceCost() > 0)
 		alm->insertAttribute("forcecost", (int)getForceCost());
-
+	
 	for (int i = 0; i < getNumberOfDots(); i++) {
 
 			String dt;
