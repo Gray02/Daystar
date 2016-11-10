@@ -238,4 +238,6 @@ void SharedWeaponObjectTemplate::readObject(LuaObject* templateData) {
 
 	combatSpam = templateData->getStringField("combatSpam");
 	animationType = templateData->getStringField("animationType");
+	
+	int bladeColor = weaponTemplate->getBladeColor();
 }
