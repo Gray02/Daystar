@@ -409,8 +409,8 @@ public:
 		this->weaponType = weaponType;
 	}
 	
-	void getBladeColor(int bladeColor) {
-		this->bladeColor = bladeColor;
+	inline int getBladeColor() const {
+		return bladeColor;
 	}
 	
 	
