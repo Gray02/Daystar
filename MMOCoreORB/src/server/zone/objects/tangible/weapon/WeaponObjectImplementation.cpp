@@ -38,6 +38,10 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 	if(speedSlice > 1.0 || speedSlice < .5) {
 		speedSlice = 1;
 	}
+	
+	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+	//int random = (System::random(11));
+	weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
 }
 
 void WeaponObjectImplementation::notifyLoadFromDatabase() {
@@ -95,9 +99,6 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 		attackSpeed = templateAttackSpeed;
 	
 	int bladeColor = weaponTemplate->getBladeColor();
-	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-	//int random = (System::random(11));
-	weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
 	
 	if (!isJediWeapon()) {
 		setSliceable(true);
