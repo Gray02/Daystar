@@ -358,7 +358,7 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	
 	//color variable shown, and sets the blade color
 	if (bladeColor != 31) {
-		alm->insertAttribute("Blade Variable:", "Variable " + bladeColor);
+		alm->insertAttribute("Blade Variable:", "Variable set!");
 		setBladeColor(bladeColor);
 	}
 
