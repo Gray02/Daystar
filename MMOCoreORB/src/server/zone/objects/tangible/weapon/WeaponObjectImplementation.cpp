@@ -624,6 +624,10 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 		setBladeColor(31);
 	}
 	
+	if (isNpcJediWeapon()) {
+		setBladeColor(5);
+	}
+	
 	value = values->getCurrentValue("woundchance");
 	if (value != ValuesMap::VALUENOTFOUND)
 		setWoundsRatio(value);
