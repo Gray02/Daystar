@@ -667,14 +667,14 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 	setConditionDamage(0);
 }
 
-bool WeaponObjectImplementation::isCertifiedFor(CreatureObject* object, SceneObject* sceneObject) {
+bool WeaponObjectImplementation::isCertifiedFor(CreatureObject* object) {
 	ManagedReference<PlayerObject*> ghost = object->getPlayerObject();
 
 	if (ghost == NULL)
 		return false;
 	
 	//int random = (System::random(11));
-	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(sceneObject);
+	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
 	if (bladeColor != 31) {
 		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
 	}
