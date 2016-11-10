@@ -503,6 +503,16 @@ class WeaponObject extends TangibleObject {
 	}
 	
 	@dirty
+	public boolean isNpcJediWeapon() {
+		return isNpcJediOneHandedWeapon();
+	}
+	
+	@dirty
+	public boolean isNpcJediOneHandedWeapon() {
+		return weaponTemplate.isDerivedFrom("object/weapon/melee/sword/base/shared_lightsaber_base.iff");
+	}
+	
+	@dirty
 	public boolean isJediWeapon() {
 		return isJediOneHandedWeapon() || isJediTwoHandedWeapon() || isJediPolearmWeapon();
 	}
