@@ -355,6 +355,12 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	if(hasAntiDecayKit()){
 		alm->insertAttribute("@veteran_new:antidecay_examine_title", "@veteran_new:antidecay_examine_text");
 	}
+	
+	//color variable shown, and sets the blade color
+	if (bladeColor != 31) {
+		alm->insertAttribute("Blade Variable:", "Variable " + bladeColor);
+		setBladeColor(bladeColor);
+	}
 
 	// Force Cost
 	if (getForceCost() > 0)
@@ -836,12 +842,4 @@ PowerupObject* WeaponObjectImplementation::removePowerup() {
 	removeMagicBit(true);
 
 	return pup;
-}
-
-int WeaponObjectImplementation::getBladeColor() {
-		return bladeColor;
-}
-	
-void WeaponObjectImplementation::setBladeColor(int value) {
-		bladeColor = value;
 }
