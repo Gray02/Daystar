@@ -216,8 +216,6 @@ String WeaponObjectImplementation::getWeaponType() {
 	if (isJediTwoHandedWeapon()) weaponType = "twohandlightsaber";
 	if (isJediPolearmWeapon()) weaponType = "polearmlightsaber";
 
-	if (isNpcJediOneHandedWeapon()) weaponType = "onehandmelee";
-
 	return weaponType;
 }
 
@@ -623,13 +621,14 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 	setActionAttackCost((int)values->getCurrentValue("attackactioncost"));
 	setMindAttackCost((int)values->getCurrentValue("attackmindcost"));
 	
-	if (isJediWeapon()) {
+	if (isJediWeapon() && bladeColor != 0) {
 		setForceCost((int)values->getCurrentValue("forcecost"));
 		setBladeColor(31);
 	}
 	
-	if (isNpcJediWeapon()) {
-		setBladeColor(5);
+	if (isJediWeapon() && bladeColor >= 0) {
+		setForceCost((int)values->getCurrentValue("forcecost"));
+		setBladeColor((int)values->getCurrentValue("bladeColor"));
 	}
 	
 	value = values->getCurrentValue("woundchance");
