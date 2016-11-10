@@ -94,6 +94,10 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 	if (templateAttackSpeed > 1)
 		attackSpeed = templateAttackSpeed;
 	
+	if (isNpcJediWeapon()) {
+		setBladeColor(5);
+	}
+	
 	if (!isJediWeapon()) {
 		setSliceable(true);
 
@@ -213,6 +217,8 @@ String WeaponObjectImplementation::getWeaponType() {
 	if (isJediOneHandedWeapon()) weaponType = "onehandlightsaber";
 	if (isJediTwoHandedWeapon()) weaponType = "twohandlightsaber";
 	if (isJediPolearmWeapon()) weaponType = "polearmlightsaber";
+
+	if (isNpcJediOneHandedWeapon()) weaponType = "onehandmelee";
 
 	return weaponType;
 }
