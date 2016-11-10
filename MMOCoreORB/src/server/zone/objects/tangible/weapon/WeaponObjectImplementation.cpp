@@ -94,13 +94,6 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 	if (templateAttackSpeed > 1)
 		attackSpeed = templateAttackSpeed;
 	
-	//test to add different colors for NPC sabers
-	bladeColor = weaponTemplate->getBladeColor();
-	if (bladeColor != 31) {
-		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
-	}
-	//end test
-
 	if (!isJediWeapon()) {
 		setSliceable(true);
 
