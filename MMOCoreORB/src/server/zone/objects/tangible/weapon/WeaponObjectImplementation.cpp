@@ -38,12 +38,6 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 	if(speedSlice > 1.0 || speedSlice < .5) {
 		speedSlice = 1;
 	}
-	
-	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-	//int random = (System::random(11));
-	if (bladeColor != 31) {
-		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
-	}
 }
 
 void WeaponObjectImplementation::notifyLoadFromDatabase() {
@@ -515,6 +509,8 @@ float WeaponObjectImplementation::getAttackSpeed(bool withPup) {
 
 	if(sliced)
 		speed *= speedSlice;
+	
+	
 
 	if(powerupObject != NULL && withPup)
 		speed -= (speed * powerupObject->getPowerupStat("attackSpeed"));
@@ -671,11 +667,17 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 	setConditionDamage(0);
 }
 
-bool WeaponObjectImplementation::isCertifiedFor(CreatureObject* object) {
+bool WeaponObjectImplementation::isCertifiedFor(CreatureObject* object, SceneObject* sceneObject) {
 	ManagedReference<PlayerObject*> ghost = object->getPlayerObject();
 
 	if (ghost == NULL)
 		return false;
+	
+	//int random = (System::random(11));
+	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(sceneObject);
+	if (bladeColor != 31) {
+		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
+	}
 
 	Vector<String>* certificationsRequired = weaponTemplate->getCertificationsRequired();
 
