@@ -12,6 +12,8 @@
 #include "server/zone/objects/scene/components/ObjectMenuComponent.h"
 #include "server/zone/packets/object/ObjectMenuResponse.h"
 #include "server/zone/packets/scene/AttributeListMessage.h"
+//test
+#include "server/zone/objects/player/events/SwapCrystalTask.h"
 
 void LightsaberObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, ObjectMenuResponse* menuResponse, CreatureObject* player) const {
 
@@ -52,8 +54,10 @@ int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObje
 	
 	if (selectedID == 90) {
 		//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+		Reference<SwapCrystalTask*> swapcrystalTask = new SwapCrystalTask(player);
 		int random = (System::random(11));
 		weapon->setCustomizationVariable("/private/index_color_blade", random, true);
+		creature->addPendingTask("swapcrystal", swapcrystalTask, 500);
 	}
 
 	// Handle opening sabers
