@@ -28,6 +28,9 @@ void LightsaberObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObj
 	String text = "@jedi_spam:open_saber";
 	menuResponse->addRadialMenuItem(89, 3, text);
 	
+	String npc = "Change color";
+	menuResponse->addRadialMenuItem(90, 3, npc);
+	
 }
 
 int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject, CreatureObject* player, byte selectedID) const {
@@ -46,6 +49,12 @@ int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObje
 
 	if (weapon == NULL)
 		return 1;
+	
+	if (selectedID == 90) {
+		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+		int random = (System::random(11));
+		weapon->setCustomizationVariable("/private/index_color_blade", random, true);
+	}
 
 	// Handle opening sabers
 	if (selectedID == 89) {
