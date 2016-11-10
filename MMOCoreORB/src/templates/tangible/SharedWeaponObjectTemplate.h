@@ -57,6 +57,8 @@ protected:
 	String xpType;
 
 	uint32 weaponType;
+	
+	int bladeColor;
 
 public:
 	enum APType {
@@ -145,6 +147,8 @@ public:
 		area = 0;
 
 		attackSpeed = 0;
+		
+		bladeColor = 0;
 
 		weaponType = 0xFFFFFFFF;
 	}
@@ -404,6 +408,12 @@ public:
 	void setWeaponType(uint32 weaponType) {
 		this->weaponType = weaponType;
 	}
+	
+	void getBladeColor(int bladeColor) {
+		this->bladeColor = bladeColor;
+	}
+	
+	
 };
 
 #endif /* SHAREDWEAPONOBJECTTEMPLATE_H_ */
