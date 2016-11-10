@@ -53,7 +53,7 @@ int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObje
 	if (selectedID == 90) {
 		//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
 		Reference<SwapCrystalTask*> swapcrystalTask = new SwapCrystalTask(player);
-		//int random = (System::random(11));
+		int random = (System::random(11));
 		//weapon->setCustomizationVariable("/private/index_color_blade", random, true);
 		for (int i = 0; i < 9; ++i) {
 			weapon->setCustomizationVariable("/private/index_color_blade", random, true);
