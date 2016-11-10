@@ -41,7 +41,9 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 	
 	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
 	//int random = (System::random(11));
-	weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
+	if (bladeColor != 31) {
+		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
+	}
 }
 
 void WeaponObjectImplementation::notifyLoadFromDatabase() {
