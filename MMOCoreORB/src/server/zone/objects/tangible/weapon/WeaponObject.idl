@@ -116,6 +116,8 @@ class WeaponObject extends TangibleObject {
 		
 		weaponTemplate = null;
 		
+		bladeColor = 0;
+		
 		Logger.setLoggingName("WeaponObject");
 		
 		damageSlice = 1;
