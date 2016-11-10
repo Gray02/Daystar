@@ -358,7 +358,7 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	
 	//color variable shown, and sets the blade color
 	if (bladeColor != 31) {
-		alm->insertAttribute("Blade Variable:", "Variable set!");
+		alm->insertAttribute("Blade Variable:", (int)getBladeColor());
 	}
 
 	// Force Cost
@@ -776,7 +776,9 @@ void WeaponObjectImplementation::decay(CreatureObject* user) {
 bool WeaponObjectImplementation::isEquipped() {
 	ManagedReference<SceneObject*> parent = getParent().get();
 	if (parent != NULL && parent->isPlayerCreature())
-		setBladeColor(bladeColor);
+		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+		//int random = (System::random(11));
+		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
 		return true;
 
 	return false;
