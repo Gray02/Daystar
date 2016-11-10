@@ -95,6 +95,9 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 		attackSpeed = templateAttackSpeed;
 	
 	int bladeColor = weaponTemplate->getBladeColor();
+	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+	//int random = (System::random(11));
+	weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
 	
 	if (!isJediWeapon()) {
 		setSliceable(true);
@@ -776,9 +779,6 @@ void WeaponObjectImplementation::decay(CreatureObject* user) {
 bool WeaponObjectImplementation::isEquipped() {
 	ManagedReference<SceneObject*> parent = getParent().get();
 	if (parent != NULL && parent->isPlayerCreature())
-		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-		//int random = (System::random(11));
-		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
 		return true;
 
 	return false;
