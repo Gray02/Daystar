@@ -53,10 +53,7 @@ int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObje
 	if (selectedID == 90) {
 		//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
 		int random = (System::random(11));
-		//weapon->setCustomizationVariable("/private/index_color_blade", random, true);
-		for (int i = 0; i < 9; ++i) {
-			weapon->setCustomizationVariable("/private/index_color_blade", random, true);
-		}
+		weapon->setCustomizationVariable("/private/index_color_blade", random, true);
 	}
 
 	// Handle opening sabers
