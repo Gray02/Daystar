@@ -625,14 +625,9 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 	setActionAttackCost((int)values->getCurrentValue("attackactioncost"));
 	setMindAttackCost((int)values->getCurrentValue("attackmindcost"));
 	
-	if (isJediWeapon() && bladeColor == 0) {
+	if (isJediWeapon()) {
 		setForceCost((int)values->getCurrentValue("forcecost"));
 		setBladeColor(31);
-	}
-	
-	if (isJediWeapon() && bladeColor >= 0) {
-		setForceCost((int)values->getCurrentValue("forcecost"));
-		setBladeColor((int)values->getCurrentValue("bladeColor"));
 	}
 	
 	value = values->getCurrentValue("woundchance");
