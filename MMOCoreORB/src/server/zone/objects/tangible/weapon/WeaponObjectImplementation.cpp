@@ -359,7 +359,6 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	//color variable shown, and sets the blade color
 	if (bladeColor != 31) {
 		alm->insertAttribute("Blade Variable:", "Variable set!");
-		setBladeColor(bladeColor);
 	}
 
 	// Force Cost
@@ -597,6 +596,12 @@ int WeaponObjectImplementation::getMindAttackCost(bool withPup) {
 		return mindAttackCost - (abs(mindAttackCost) * powerupObject->getPowerupStat("mindAttackCost"));
 
 	return mindAttackCost;
+}
+
+int WeaponObjectImplementation::setBladeColor(int value) {
+	setBladeColor(value);
+	
+	return bladeColor;
 }
 
 void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bool firstUpdate) {
