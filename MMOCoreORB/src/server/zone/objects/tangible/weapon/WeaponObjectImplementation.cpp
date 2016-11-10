@@ -97,7 +97,7 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 	int bladeColor = weaponTemplate->getBladeColor();
 	
 	if (bladeColor >= 0) {
-		setBladeColor((int)values->getCurrentValue("bladeColor"));
+		setBladeColor(bladeColor);
 	}
 	
 	if (!isJediWeapon()) {
