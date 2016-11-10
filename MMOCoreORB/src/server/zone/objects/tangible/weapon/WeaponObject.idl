@@ -166,7 +166,7 @@ class WeaponObject extends TangibleObject {
 	 * @param object player object to check against
 	 */
 	@dirty
-	public native boolean isCertifiedFor(CreatureObject object);
+	public native boolean isCertifiedFor(CreatureObject object, SceneObject sceneObject);
 	
 	@local
 	@dirty
