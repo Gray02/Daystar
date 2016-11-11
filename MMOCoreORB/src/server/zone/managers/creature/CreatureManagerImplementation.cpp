@@ -539,6 +539,13 @@ bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject
 		}
 
 		ManagedReference<SceneObject*> defaultWeapon = zoneServer->createObject(defaultWeaponCRC, persistent);
+		
+		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(defaultWeapon);
+		
+		if(weapon->isJediWeapon() && creoTempl->getSaberColor() != 0){
+			weapon->setCustomizationVariable("/private/index_color_blade", creoTempl->getSaberColor(), true);
+		}
+		
 
 		if (defaultWeapon == NULL) {
 			error("could not create creature default weapon");
