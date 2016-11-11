@@ -544,7 +544,7 @@ bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject
 
 		ManagedReference<SceneObject*> defaultWeapon = zoneServer->createObject(defaultWeaponCRC, persistent);
 		
-		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(defaultWeapon);
+		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(defaultWeapon.get());
 		
 		if (weapon->isJediWeapon() && tmpLsColor != 0){
 			weapon->setCustomizationVariable("/private/index_color_blade", tmpLsColor, true);
