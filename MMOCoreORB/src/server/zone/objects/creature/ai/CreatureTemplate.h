@@ -102,6 +102,9 @@ protected:
 
 	String reactionStf;
 	String personalityStf;
+	
+	//Lightsaber Color
+	int lsColor;
 
 public:
 	CreatureTemplate();
@@ -387,6 +390,10 @@ public:
 
 	inline String getReactionStf() {
 		return reactionStf;
+	}
+	
+	inline int getSaberColor() {
+		return lsColor;
 	}
 
 	inline String getPersonalityStf() {
