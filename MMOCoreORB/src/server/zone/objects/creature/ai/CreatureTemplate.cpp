@@ -67,6 +67,8 @@ CreatureTemplate::CreatureTemplate() {
 	containerComponentTemplate = "";
 	reactionStf = "";
 	personalityStf = "";
+	//saber color
+	saberColor = 0;
 }
 
 CreatureTemplate::~CreatureTemplate() {
@@ -197,4 +199,5 @@ void CreatureTemplate::readObject(LuaObject* templateData) {
 
 	reactionStf = templateData->getStringField("reactionStf");
 	personalityStf = templateData->getStringField("personalityStf");
+	saberColor = templateData->getIntField("saberColor");
 }
