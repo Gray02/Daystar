@@ -355,6 +355,13 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	if(hasAntiDecayKit()){
 		alm->insertAttribute("@veteran_new:antidecay_examine_title", "@veteran_new:antidecay_examine_text");
 	}
+	
+	//int random = (System::random(11));
+	//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+	if (bladeColor != 31) {
+		//weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
+		alm->insertAttribute("Blade Color", getBladeColor());
+	}
 
 	// Force Cost
 	if (getForceCost() > 0)
@@ -673,12 +680,6 @@ bool WeaponObjectImplementation::isCertifiedFor(CreatureObject* object) {
 	if (ghost == NULL)
 		return false;
 	
-	//int random = (System::random(11));
-	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-	if (bladeColor != 31) {
-		weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
-	}
-
 	Vector<String>* certificationsRequired = weaponTemplate->getCertificationsRequired();
 
 	for (int i = 0; i < certificationsRequired->size(); ++i) {
