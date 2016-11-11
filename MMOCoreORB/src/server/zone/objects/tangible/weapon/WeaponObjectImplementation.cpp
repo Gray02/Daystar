@@ -779,6 +779,12 @@ void WeaponObjectImplementation::decay(CreatureObject* user) {
 
 bool WeaponObjectImplementation::isEquipped() {
 	ManagedReference<SceneObject*> parent = getParent().get();
+	if (getBladeColor > 31 || getBladeColor < 0) {
+		setBladeColor(31);
+	}
+	if (getBladeColor != 31) {
+		setBladeColor(getBladeColor);
+	}
 	if (parent != NULL && parent->isPlayerCreature())
 		return true;
 
