@@ -783,7 +783,7 @@ bool WeaponObjectImplementation::isEquipped() {
 		setBladeColor(31);
 	}
 	if (getBladeColor != 31) {
-		setBladeColor(getBladeColor);
+		setBladeColor(bladeColor);
 	}
 	if (parent != NULL && parent->isPlayerCreature())
 		return true;
