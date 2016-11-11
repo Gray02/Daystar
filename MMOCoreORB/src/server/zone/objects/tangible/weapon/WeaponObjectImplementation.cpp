@@ -44,9 +44,9 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 	}
 	
 	if (bladeColor != 31) {
-		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-		weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
-		//setBladeColor(bladeColor);
+		//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+		//weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
+		setBladeColor(bladeColor);
 	}
 }
 
