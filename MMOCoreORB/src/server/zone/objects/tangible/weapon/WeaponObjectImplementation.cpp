@@ -38,6 +38,16 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 	if(speedSlice > 1.0 || speedSlice < .5) {
 		speedSlice = 1;
 	}
+	
+	if (bladeColor > 31 || bladeColor < 0) {
+		setBladeColor(31);
+	}
+	
+	if (bladeColor != 31) {
+		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
+		weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
+		//setBladeColor(bladeColor);
+	}
 }
 
 void WeaponObjectImplementation::notifyLoadFromDatabase() {
@@ -779,12 +789,6 @@ void WeaponObjectImplementation::decay(CreatureObject* user) {
 
 bool WeaponObjectImplementation::isEquipped() {
 	ManagedReference<SceneObject*> parent = getParent().get();
-	if (bladeColor > 31 || bladeColor < 0) {
-		setBladeColor(31);
-	}
-	if (bladeColor != 31) {
-		setBladeColor(bladeColor);
-	}
 	if (parent != NULL && parent->isPlayerCreature())
 		return true;
 
