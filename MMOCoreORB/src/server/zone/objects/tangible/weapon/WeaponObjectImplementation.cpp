@@ -676,7 +676,7 @@ bool WeaponObjectImplementation::isCertifiedFor(CreatureObject* object) {
 	//int random = (System::random(11));
 	ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
 	if (bladeColor != 31) {
-		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
+		weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
 	}
 
 	Vector<String>* certificationsRequired = weaponTemplate->getCertificationsRequired();
