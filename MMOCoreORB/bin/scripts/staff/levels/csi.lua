@@ -3,7 +3,8 @@ csi = {
 	name = "csi",
 	tag = "Daystar",
 	skills = {
-		"admin_base"
+		"admin_base",
+		"admin_general_admin_01"
 	}
 }
 
