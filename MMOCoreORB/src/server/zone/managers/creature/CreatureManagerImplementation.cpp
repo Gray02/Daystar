@@ -521,7 +521,6 @@ SpawnArea* CreatureManagerImplementation::getSpawnArea(const String& areaname) {
 bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject* creature, uint32 templateCRC, bool persistent, uint32 mobileTemplateCRC) {
 	if (creature->hasSlotDescriptor("default_weapon")) {
 		uint32 defaultWeaponCRC = 0;
-		int tmpLsColor = 0;
 
 		if (mobileTemplateCRC != 0) {
 			CreatureTemplate* creoTempl = creatureTemplateManager->getTemplate(mobileTemplateCRC);
@@ -529,9 +528,6 @@ bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject
 			if (creoTempl != NULL && creoTempl->getDefaultWeapon() != "") {
 				defaultWeaponCRC = String(creoTempl->getDefaultWeapon()).hashCode();
 			}
-			if (creoTempl != NULL && creoTempl->getSaberColor() != 0){
-				tmpLsColor = creoTempl->getSaberColor();
-				}
 		}
 
 		if (defaultWeaponCRC == 0) {
@@ -543,14 +539,6 @@ bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject
 		}
 
 		ManagedReference<SceneObject*> defaultWeapon = zoneServer->createObject(defaultWeaponCRC, persistent);
-		
-		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(defaultWeapon.get());
-		
-		if (weapon->getWeaponType() == (const uint32)0x2000 || weapon->getWeaponType() == (const uint32)0x4000 || weapon->getWeaponType() == (const uint32)0x8000){
-			weapon->setBladeColor(4);
-			weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
-		}
-		
 
 		if (defaultWeapon == NULL) {
 			error("could not create creature default weapon");
