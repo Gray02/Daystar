@@ -546,7 +546,8 @@ bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject
 		
 		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(defaultWeapon.get());
 		
-		if (weapon->isJediWeapon() ){
+		if (weapon->getDamageType() == 16){
+			weapon->setBladeColor(4);
 			weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
 		}
 		
