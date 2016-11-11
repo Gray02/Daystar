@@ -39,15 +39,6 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 		speedSlice = 1;
 	}
 	
-	if (bladeColor > 31 || bladeColor < 0) {
-		setBladeColor(31);
-	}
-	
-	if (bladeColor != 31) {
-		//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-		//weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
-		setBladeColor(bladeColor);
-	}
 }
 
 void WeaponObjectImplementation::notifyLoadFromDatabase() {
@@ -364,13 +355,6 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	//Anti Decay Kit
 	if(hasAntiDecayKit()){
 		alm->insertAttribute("@veteran_new:antidecay_examine_title", "@veteran_new:antidecay_examine_text");
-	}
-	
-	//int random = (System::random(11));
-	//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
-	if (bladeColor != 31) {
-		//weapon->setCustomizationVariable("/private/index_color_blade", 4, true);
-		alm->insertAttribute("Blade Color", getBladeColor());
 	}
 
 	// Force Cost
