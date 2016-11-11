@@ -521,6 +521,7 @@ SpawnArea* CreatureManagerImplementation::getSpawnArea(const String& areaname) {
 bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject* creature, uint32 templateCRC, bool persistent, uint32 mobileTemplateCRC) {
 	if (creature->hasSlotDescriptor("default_weapon")) {
 		uint32 defaultWeaponCRC = 0;
+		int tmpLsColor = 0;
 
 		if (mobileTemplateCRC != 0) {
 			CreatureTemplate* creoTempl = creatureTemplateManager->getTemplate(mobileTemplateCRC);
@@ -528,6 +529,9 @@ bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject
 			if (creoTempl != NULL && creoTempl->getDefaultWeapon() != "") {
 				defaultWeaponCRC = String(creoTempl->getDefaultWeapon()).hashCode();
 			}
+			if (creoTempl != NULL && creoTempl->getSaberColor() != 0){
+				tmpLsColor = creoTempl->getSaberColor();
+				}
 		}
 
 		if (defaultWeaponCRC == 0) {
@@ -542,7 +546,7 @@ bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject
 		
 		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(defaultWeapon);
 		
-		if(weapon->isJediWeapon() && creoTempl->getSaberColor() != 0){
+		if (weapon->isJediWeapon() && tmpLsColor != 0){
 			weapon->setCustomizationVariable("/private/index_color_blade", creoTempl->getSaberColor(), true);
 		}
 		
