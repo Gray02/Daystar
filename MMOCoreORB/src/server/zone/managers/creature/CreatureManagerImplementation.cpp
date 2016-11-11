@@ -547,7 +547,7 @@ bool CreatureManagerImplementation::createCreatureChildrenObjects(CreatureObject
 		ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(defaultWeapon);
 		
 		if (weapon->isJediWeapon() && tmpLsColor != 0){
-			weapon->setCustomizationVariable("/private/index_color_blade", creoTempl->getSaberColor(), true);
+			weapon->setCustomizationVariable("/private/index_color_blade", tmpLsColor, true);
 		}
 		
 
