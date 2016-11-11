@@ -48,7 +48,8 @@ dark_jedi_knight = Creature:new {
 	},
 	weapons = {"dark_jedi_weapons_gen3"},
 	conversationTemplate = "",
-	attacks = merge(lightsabermaster,forcepowermaster)
+	attacks = merge(lightsabermaster,forcepowermaster),
+	lsColor=2
 }
 
 CreatureTemplates:addCreatureTemplate(dark_jedi_knight, "dark_jedi_knight")
