@@ -51,6 +51,7 @@ int LightsaberObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObje
 		return 1;
 	
 	if (selectedID == 90) {
+		int bladeColor = weapon->getBladeColor();
 		//ManagedReference<WeaponObject*> weapon = cast<WeaponObject*>(_this.getReferenceUnsafeStaticCast()->getParent().get()->getParent().get().get());
 		//int random = (System::random(11));
 		weapon->setCustomizationVariable("/private/index_color_blade", bladeColor, true);
