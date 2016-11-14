@@ -644,6 +644,11 @@ int PlayerManagerImplementation::notifyDestruction(TangibleObject* destructor, T
 		return 1;
 
 	CreatureObject* playerCreature = cast<CreatureObject*>( destructedObject);
+	
+  	int playerHealth = playerCreature->getHAM(CreatureAttribute::HEALTH);
+  
+  	if (playerHealth > 0) // Incap only when health is gone
+  		return 1;
 
 	if ((playerCreature->isIncapacitated() && !(playerCreature->isFeigningDeath())) || playerCreature->isDead())
 		return 1;
