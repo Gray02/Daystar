@@ -41,7 +41,7 @@ feral_force_wielder = Creature:new {
 			}
 		}
 	},
-	weapons = {"luke_skywalker_weapons"},
+	weapons = {"mixed_force_weapons"},
 	conversationTemplate = "",
 	attacks = merge(pikemanmaster,brawlermaster)
 }

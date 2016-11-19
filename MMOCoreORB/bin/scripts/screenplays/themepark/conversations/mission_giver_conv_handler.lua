@@ -1,7 +1,8 @@
 local ObjectManager = require("managers.object.object_manager")
 
 mission_giver_conv_handler = conv_handler:new {
-	themePark = nil
+	themePark = nil,
+	useQuitQuest = true
 }
 
 function mission_giver_conv_handler:setThemePark(themeParkNew)
@@ -33,6 +34,10 @@ function mission_giver_conv_handler:runScreenHandlers(pConvTemplate, pPlayer, pN
 		pConvScreen = self:handleScreenNpc3(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
 	elseif screenID == "npc_4_n" then
 		pConvScreen = self:handleScreenNpc4(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+	elseif screenID == "npc_5_n" then
+		pConvScreen = self:handleScreenNpc5(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+	elseif screenID == "npc_6_n" then
+		pConvScreen = self:handleScreenNpc6(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
 	elseif screenID == "npc_work_n" then
 		pConvScreen = self:handleScreenWork(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
 	elseif screenID == "notit_n" then
@@ -47,10 +52,14 @@ function mission_giver_conv_handler:runScreenHandlers(pConvTemplate, pPlayer, pN
 		pConvScreen = self:handleScreenNext(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
 	elseif screenID == "notyet" then
 		pConvScreen = self:handleScreenNotYet(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
-	elseif screenID == "cant_work" or screenID == "cantwork" then
+	elseif screenID == "cant_work" then
 		pConvScreen = self:handleScreenCantWork(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
 	elseif screenID == "no_faction" then
 		pConvScreen = self:handleScreenNoFaction(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+	elseif screenID == "quit_quest" then
+		pConvScreen = self:handleScreenQuitQuest(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+	elseif screenID == "npc_quit" then
+		self.themePark:resetCurrentMission(pPlayer)
 	end
 
 	return pConvScreen
@@ -78,6 +87,9 @@ function mission_giver_conv_handler:handleScreenInit(pConvTemplate, pPlayer, pNp
 
 		if (self.themePark:missionStatus(pPlayer) == -1) then
 			nextScreenName = "failure"
+
+		elseif currentMissionNumber == 0 and not self.themePark.genericGiver then
+			nextScreenName = "notyet"
 
 		elseif missionFaction ~= 0 and self.themePark:isInFaction(missionFaction, pPlayer) ~= true then
 			if self.themePark:isValidConvoString(stfFile, ":notyet") then
@@ -149,13 +161,21 @@ function mission_giver_conv_handler:handleScreenInit(pConvTemplate, pPlayer, pNp
 			nextScreenName = "notyet"
 		end
 	else
-		nextScreenName = "cant_work"
+		if self.useQuitQuest then
+			nextScreenName = "quit_quest"
+		else
+			nextScreenName = "cant_work"
+		end
 	end
 
 	if (self.themePark.genericGiver) then
 		local giverId = readData(CreatureObject(pPlayer):getObjectID() ..":genericGiverID")
 		if (giverId ~= 0 and giverId ~= SceneObject(pNpc):getObjectID()) then
-			nextScreenName = "cantwork"
+			if self.useQuitQuest then
+				nextScreenName = "quit_quest"
+			else
+				nextScreenName = "cant_work"
+			end
 		end
 	end
 
@@ -245,6 +265,14 @@ function mission_giver_conv_handler:handleScreenNpc1(pConvTemplate, pPlayer, pNp
 
 	if (self.themePark:isValidConvoString(stfFile, ":player_3_" .. missionNumber)) then
 		clonedScreen:addOption(stfFile .. ":player_3_" .. missionNumber, "npc_4_n")
+
+		if (self.themePark:isValidConvoString(stfFile, ":player_4_" .. missionNumber)) then
+			clonedScreen:addOption(stfFile .. ":player_4_" .. missionNumber, "npc_5_n")
+
+			if (self.themePark:isValidConvoString(stfFile, ":player_5_" .. missionNumber)) then
+				clonedScreen:addOption(stfFile .. ":player_5_" .. missionNumber, "npc_6_n")
+			end
+		end
 	end
 
 	return pConvScreen
@@ -293,6 +321,59 @@ function mission_giver_conv_handler:handleScreenNpc4(pConvTemplate, pPlayer, pNp
 
 	clonedScreen:addOption(stfFile .. ":player_1_" .. missionNumber, "accept")
 	clonedScreen:addOption(stfFile .. ":player_2_" .. missionNumber, "npc_3_n")
+
+	if (self.themePark:isValidConvoString(stfFile, ":player_4_" .. missionNumber)) then
+		clonedScreen:addOption(stfFile .. ":player_4_" .. missionNumber, "npc_5_n")
+
+		if (self.themePark:isValidConvoString(stfFile, ":player_5_" .. missionNumber)) then
+			clonedScreen:addOption(stfFile .. ":player_5_" .. missionNumber, "npc_6_n")
+		end
+	end
+
+	return pConvScreen
+end
+
+function mission_giver_conv_handler:handleScreenNpc5(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+	local screen = LuaConversationScreen(pConvScreen)
+	pConvScreen = screen:cloneScreen()
+	local clonedScreen = LuaConversationScreen(pConvScreen)
+
+	local npcNumber = self.themePark:getNpcNumber(pNpc)
+	local missionNumber = self.themePark:getCurrentMissionNumber(npcNumber, pPlayer)
+	local stfFile = self.themePark:getStfFile(npcNumber)
+
+	clonedScreen:setDialogTextStringId(stfFile .. ":npc_5_" .. missionNumber)
+
+	clonedScreen:removeAllOptions()
+
+	clonedScreen:addOption(stfFile .. ":player_1_" .. missionNumber, "accept")
+	clonedScreen:addOption(stfFile .. ":player_2_" .. missionNumber, "npc_3_n")
+	clonedScreen:addOption(stfFile .. ":player_3_" .. missionNumber, "npc_4_n")
+
+	if (self.themePark:isValidConvoString(stfFile, ":player_5_" .. missionNumber)) then
+		clonedScreen:addOption(stfFile .. ":player_5_" .. missionNumber, "npc_6_n")
+	end
+
+	return pConvScreen
+end
+
+function mission_giver_conv_handler:handleScreenNpc6(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+	local screen = LuaConversationScreen(pConvScreen)
+	pConvScreen = screen:cloneScreen()
+	local clonedScreen = LuaConversationScreen(pConvScreen)
+
+	local npcNumber = self.themePark:getNpcNumber(pNpc)
+	local missionNumber = self.themePark:getCurrentMissionNumber(npcNumber, pPlayer)
+	local stfFile = self.themePark:getStfFile(npcNumber)
+
+	clonedScreen:setDialogTextStringId(stfFile .. ":npc_6_" .. missionNumber)
+
+	clonedScreen:removeAllOptions()
+
+	clonedScreen:addOption(stfFile .. ":player_1_" .. missionNumber, "accept")
+	clonedScreen:addOption(stfFile .. ":player_2_" .. missionNumber, "npc_3_n")
+	clonedScreen:addOption(stfFile .. ":player_3_" .. missionNumber, "npc_4_n")
+	clonedScreen:addOption(stfFile .. ":player_4_" .. missionNumber, "npc_5_n")
 
 	return pConvScreen
 end
@@ -486,6 +567,20 @@ function mission_giver_conv_handler:handleScreenNoFaction(pConvTemplate, pPlayer
 	local clonedScreen = LuaConversationScreen(pConvScreen)
 
 	clonedScreen:setDialogTextStringId("@theme_park/messages:no_faction") -- "You don't have the proper standing to deal with me. Perhaps you should be more careful who you associate with."
+
+	return pConvScreen
+end
+
+function mission_giver_conv_handler:handleScreenQuitQuest(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+	local screen = LuaConversationScreen(pConvScreen)
+	pConvScreen = screen:cloneScreen()
+	local clonedScreen = LuaConversationScreen(pConvScreen)
+
+	clonedScreen:setDialogTextStringId("@static_npc/default_dialog:quit_quest") -- I can see that you're busy working for someone else at the moment. Would you like to continue to do so, or would you like to work for me instead?
+
+	clonedScreen:removeAllOptions()
+	clonedScreen:addOption("@static_npc/default_dialog:player_quit", "npc_quit") -- I think I'd like to work for you.
+	clonedScreen:addOption("@static_npc/default_dialog:player_continue", "npc_continue") -- No, I think I'll keep my current job, thanks.
 
 	return pConvScreen
 end

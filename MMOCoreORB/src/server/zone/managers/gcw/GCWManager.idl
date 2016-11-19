@@ -31,6 +31,9 @@ class GCWManager extends ManagedService implements Logger {
 	public static final int PLAYERFACTIONBASE = 1;
 	public static final int STATICFACTIONBASE = 2;
 
+	private static final int CONTRABANDSCANSCHEDULETIME = 1000;
+	private static final int CONTRABANDSCANCOOLDOWN = 10000;
+
 	private Zone zone;
 
 	@dereferenced
@@ -153,7 +156,7 @@ class GCWManager extends ManagedService implements Logger {
 	public native void loadLuaConfig();
 	public native void stop();
 
-	public native void performGCWTasks();
+	public native void performGCWTasks(boolean initial);
 	private native void verifyTurrets(BuildingObject building);
 
 	public native boolean canPlaceMoreBases(CreatureObject creature);

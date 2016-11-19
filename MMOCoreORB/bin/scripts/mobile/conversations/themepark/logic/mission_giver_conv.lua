@@ -46,16 +46,6 @@ function createMissionGiverConvoTemplate(templateName, convoHandler)
 
 	mission_giver_convotemplate:addScreen(mission_giver_cant_work);
 
-	mission_giver_cantwork = ConvoScreen:new {
-		id = "cantwork",
-		leftDialog = ":cantwork",
-		stopConversation = "true",
-		options = {
-		}
-	}
-
-	mission_giver_convotemplate:addScreen(mission_giver_cantwork);
-
 	mission_giver_invfull = ConvoScreen:new {
 		id = "inv_full",
 		leftDialog = "",
@@ -113,7 +103,9 @@ function createMissionGiverConvoTemplate(templateName, convoHandler)
 		options = {
 			{ ":player_1_1", "accept" },
 			{ ":player_2_1", "npc_3_n" },
-			{ ":player_3_1", "npc_4_n" }
+			{ ":player_3_1", "npc_4_n" },
+			{ ":player_4_1", "npc_5_n" },
+			{ ":player_5_1", "npc_6_n" }
 		}
 	}
 
@@ -165,11 +157,41 @@ function createMissionGiverConvoTemplate(templateName, convoHandler)
 		stopConversation = "false",
 		options = {
 			{ ":player_1_1", "accept" },
-			{ ":player_2_1", "npc_3_n" }
+			{ ":player_2_1", "npc_3_n" },
+			{ ":player_4_1", "npc_5_n" },
+			{ ":player_5_1", "npc_6_n" }
 		}
 	}
 
 	mission_giver_convotemplate:addScreen(mission_giver_npc_4_n);
+
+	mission_giver_npc_5_n = ConvoScreen:new {
+		id = "npc_5_n",
+		leftDialog = ":npc_5_1",
+		stopConversation = "false",
+		options = {
+			{ ":player_1_1", "accept" },
+			{ ":player_2_1", "npc_3_n" },
+			{ ":player_3_1", "npc_4_n" },
+			{ ":player_5_1", "npc_6_n" }
+		}
+	}
+
+	mission_giver_convotemplate:addScreen(mission_giver_npc_5_n);
+
+	mission_giver_npc_6_n = ConvoScreen:new {
+		id = "npc_6_n",
+		leftDialog = ":npc_6_1",
+		stopConversation = "false",
+		options = {
+			{ ":player_1_1", "accept" },
+			{ ":player_2_1", "npc_3_n" },
+			{ ":player_3_1", "npc_4_n" },
+			{ ":player_4_1", "npc_5_n" }
+		}
+	}
+
+	mission_giver_convotemplate:addScreen(mission_giver_npc_6_n);
 
 	mission_giver_status = ConvoScreen:new {
 		id = "status",
@@ -243,6 +265,36 @@ function createMissionGiverConvoTemplate(templateName, convoHandler)
 
 	mission_giver_convotemplate:addScreen(mission_giver_npc_reward_n);
 
+	mission_giver_quit_quest = ConvoScreen:new {
+		id = "quit_quest",
+		leftDialog = "@static_npc/default_dialog:quit_quest", -- I can see that you're busy working for someone else at the moment. Would you like to continue to do so, or would you like to work for me instead?
+		stopConversation = "false",
+		options = {
+			{ "@static_npc/default_dialog:player_quit", "npc_quit" }, -- I think I'd like to work for you.
+			{ "@static_npc/default_dialog:player_continue", "npc_continue" } -- No, I think I'll keep my current job, thanks.
+		}
+	}
+
+	mission_giver_convotemplate:addScreen(mission_giver_quit_quest);
+
+	mission_giver_npc_quit = ConvoScreen:new {
+		id = "npc_quit",
+		leftDialog = "@static_npc/default_dialog:npc_quit", -- Fine. You are now free of your prior obligation, and you can freely work for me.
+		stopConversation = "true",
+		options = {}
+	}
+
+	mission_giver_convotemplate:addScreen(mission_giver_npc_quit);
+
+	mission_giver_npc_continue = ConvoScreen:new {
+		id = "npc_continue",
+		leftDialog = "@static_npc/default_dialog:npc_continue", -- Fine then. Don't bother with me until you're ready to work for me.
+		stopConversation = "true",
+		options = {}
+	}
+
+	mission_giver_convotemplate:addScreen(mission_giver_npc_continue);
+
 	addConversationTemplate(templateName, mission_giver_convotemplate);
 end
 
@@ -286,6 +338,7 @@ createMissionGiverConvoTemplate("grondorn_muse_mission_giver_convotemplate","gro
 createMissionGiverConvoTemplate("hal_horn_mission_giver_convotemplate","hal_horn_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("ignar_ominaz_mission_giver_convotemplate","ignar_ominaz_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("jadam_questrel_mission_giver_convotemplate","jadam_questrel_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("joz_jodhul_mission_giver_convotemplate","joz_jodhul_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("kirkin_liawoon_mission_giver_convotemplate","kirkin_liawoon_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("lady_hutt_mission_giver_convotemplate","lady_hutt_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("luthin_dlunar_mission_giver_convotemplate","luthin_dlunar_mission_giver_conv_handler")
@@ -295,6 +348,7 @@ createMissionGiverConvoTemplate("scolex_grath_mission_giver_convotemplate","scol
 createMissionGiverConvoTemplate("serjix_arrogantus_mission_giver_convotemplate","serjix_arrogantus_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("skinkner_mission_giver_convotemplate","skinkner_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("thrackan_sal_solo_mission_giver_convotemplate","thrackan_sal_solo_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("venthan_chassu_mission_giver_convotemplate","venthan_chassu_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("viceprex_tasks_mission_giver_convotemplate","viceprex_tasks_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("zakarisz_ghent_mission_giver_convotemplate","zakarisz_ghent_mission_giver_conv_handler")
 
@@ -318,9 +372,13 @@ createMissionGiverConvoTemplate("warden_vinzel_haylon_mission_giver_convotemplat
 createMissionGiverConvoTemplate("xarot_korlin_mission_giver_convotemplate", "xarot_korlin_mission_giver_conv_handler")
 
 -- Naboo
+createMissionGiverConvoTemplate("arrek_von_sarko_mission_giver_convotemplate", "arrek_von_sarko_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("arven_wendik_mission_giver_convotemplate", "arven_wendik_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("athok_dinvar_mission_giver_convotemplate", "athok_dinvar_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("bab_esrus_mission_giver_convotemplate", "bab_esrus_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("bardo_klinj_mission_giver_convotemplate", "bardo_klinj_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("boss_nass_mission_giver_convotemplate", "boss_nass_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("brass_marshoo_mission_giver_convotemplate", "brass_marshoo_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("brennis_doore_mission_giver_convotemplate", "brennis_doore_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("damalia_korde_mission_giver_convotemplate", "damalia_korde_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("dilvin_lormurojo_mission_giver_convotemplate", "dilvin_lormurojo_mission_giver_conv_handler")
@@ -332,8 +390,11 @@ createMissionGiverConvoTemplate("kritus_morven_mission_giver_convotemplate", "kr
 createMissionGiverConvoTemplate("lareen_dantara_mission_giver_convotemplate", "lareen_dantara_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("leb_slesher_mission_giver_convotemplate", "leb_slesher_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("lergo_brazee_mission_giver_convotemplate", "lergo_brazee_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("lob_dizz_mission_giver_convotemplate", "lob_dizz_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("mullud_bombo_mission_giver_convotemplate", "mullud_bombo_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("palo_mission_giver_convotemplate", "palo_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("pooja_naberrie_mission_giver_convotemplate", "pooja_naberrie_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("radanthus_mandelatara_mission_giver_convotemplate", "radanthus_mandelatara_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("rep_been_mission_giver_convotemplate", "rep_been_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("rovim_minnoni_mission_giver_convotemplate", "rovim_minnoni_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("tamvar_senzen_mission_giver_convotemplate", "tamvar_senzen_mission_giver_conv_handler")
@@ -363,6 +424,7 @@ createMissionGiverConvoTemplate("gravin_attal_mission_giver_convotemplate", "gra
 createMissionGiverConvoTemplate("green_laser_mission_giver_convotemplate", "green_laser_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("haleen_snowline_hagrin_zeed_mission_giver_convotemplate", "haleen_snowline_hagrin_zeed_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("igbi_freemo_mission_giver_convotemplate", "igbi_freemo_mission_giver_conv_handler")
+createMissionGiverConvoTemplate("jusani_zhord_mission_giver_convotemplate", "jusani_zhord_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("kathikiis_ruwahurr_mission_giver_convotemplate", "kathikiis_ruwahurr_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("lethin_bludder_mission_giver_convotemplate", "lethin_bludder_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("mourno_draver_mission_giver_convotemplate", "mourno_draver_mission_giver_conv_handler")
@@ -408,4 +470,3 @@ createMissionGiverConvoTemplate("lian_byrne_mission_giver_convotemplate","lian_b
 createMissionGiverConvoTemplate("megan_drlar_mission_giver_convotemplate","megan_drlar_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("ruwan_tokai_mission_giver_convotemplate","ruwan_tokai_mission_giver_conv_handler")
 createMissionGiverConvoTemplate("yith_seenath_mission_giver_convotemplate","yith_seenath_mission_giver_conv_handler")
-

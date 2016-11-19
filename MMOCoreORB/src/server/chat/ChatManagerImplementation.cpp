@@ -50,6 +50,7 @@
 #include "server/chat/room/ChatRoomMap.h"
 #include "server/chat/SendMailTask.h"
 #include "server/zone/packets/chat/ChatSystemMessage.h"
+#include "templates/string/StringFile.h"
 
 ChatManagerImplementation::ChatManagerImplementation(ZoneServer* serv, int initsize) : ManagedServiceImplementation() {
 	server = serv;
@@ -64,7 +65,7 @@ ChatManagerImplementation::ChatManagerImplementation(ZoneServer* serv, int inits
 
 	loadSocialTypes();
 	loadSpatialChatTypes();
-
+	loadMoodTypes();
 }
 
 void ChatManagerImplementation::stop() {
@@ -227,6 +228,79 @@ void ChatManagerImplementation::loadSpatialChatTypes() {
 	iffStream->closeForm('SPCT');
 
 	delete iffStream;
+}
+
+void ChatManagerImplementation::loadMoodTypes() {
+	IffStream* iffStream = TemplateManager::instance()->openIffFile("chat/mood_types.iff");
+
+	if (iffStream == NULL) {
+		error("Could not open chat/mood_types.iff");
+		return;
+	}
+
+	iffStream->openForm('MOOD');
+
+	Chunk* version = iffStream->openForm('0000');
+
+	Chunk* data = iffStream->openChunk('TYPS');
+	int i = 0;
+
+	while (data->hasData()) {
+		String key;
+		data->readString(key);
+		i++;
+
+		moodTypes.put(key, i);
+	}
+
+	iffStream->closeChunk('TYPS');
+
+	iffStream->closeForm('0000');
+	iffStream->closeForm('MOOD');
+
+	delete iffStream;
+
+	moodTypes.put("meditating", i + 1);
+	moodTypes.put("entertained", i + 2);
+
+	ObjectInputStream* stream = TemplateManager::instance()->openTreFile("string/en/mood_types.stf");
+
+	if (stream != NULL) {
+
+		if (stream->size() > 4) {
+
+			StringFile stringFile;
+
+			if (stringFile.load(stream)) {
+
+				HashTable<String, UnicodeString>* hashTable = stringFile.getStringMap();
+
+				HashTableIterator<String, UnicodeString> iterator = hashTable->iterator();
+
+				while (iterator.hasNext()) {
+					UnicodeString value = iterator.getNextValue();
+
+					String mood, anim;
+					UnicodeTokenizer token(value);
+					token.setDelimeter("\n");
+
+					token.getStringToken(mood);
+					token.getStringToken(anim);
+
+					if (!anim.beginsWith("~")) {
+						moodAnimations.put(mood, anim);
+					}
+				}
+			}
+		}
+
+		delete stream;
+	}
+
+	moodAnimations.put("meditating", "meditating");
+	moodAnimations.put("entertained", "entertained");
+
+	info("Loaded " + String::valueOf(moodTypes.size()) + " mood types.", true);
 }
 
 void ChatManagerImplementation::initiateRooms() {
@@ -2588,4 +2662,40 @@ void ChatManagerImplementation::handleChatUnbanPlayer(CreatureObject* unbanner, 
 void ChatManagerImplementation::sendChatOnUnbanResult(CreatureObject* unbanner, const String& unbaneeName, const String& roomPath, int error, int requestID) {
 	ChatOnUnbanFromRoom* notification = new ChatOnUnbanFromRoom(unbanner, unbaneeName, roomPath, error, requestID);
 	unbanner->sendMessage(notification);
+}
+
+unsigned int ChatManagerImplementation::getSpatialChatType(const String& spatialChatType) {
+	if (spatialChatTypes.contains(spatialChatType)) {
+		return spatialChatTypes.get(spatialChatType);
+	} else {
+		warning("Spatial chat type '" + spatialChatType + "' not found.");
+		return 0;
+	}
+}
+
+unsigned int ChatManagerImplementation::getMoodID(const String& moodType) {
+	if (moodTypes.contains(moodType)) {
+		return moodTypes.get(moodType);
+	} else {
+		warning("Mood type '" + moodType + "' not found.");
+		return 0;
+	}
+}
+
+const String ChatManagerImplementation::getMoodType(unsigned int id) {
+	for (int i = 0; i < moodTypes.size(); i++) {
+		if (id == moodTypes.get(i)) {
+			return moodTypes.elementAt(i).getKey();
+		}
+	}
+
+	return "";
+}
+
+const String ChatManagerImplementation::getMoodAnimation(const String& moodType) {
+	if (moodAnimations.contains(moodType)) {
+		return moodAnimations.get(moodType);
+	}
+
+	return "neutral";
 }

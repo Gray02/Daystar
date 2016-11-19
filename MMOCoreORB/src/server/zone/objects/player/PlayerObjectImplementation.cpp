@@ -1966,7 +1966,7 @@ void PlayerObjectImplementation::doForceRegen() {
 		if (medTask != NULL)
 			modifier = 3;
 	}
-	
+
 	uint32 forceTick = tick * modifier;
 
 	if (forceTick > getForcePowerMax() - getForcePower()){   // If the player's Force Power is going to regen again and it's close to max,

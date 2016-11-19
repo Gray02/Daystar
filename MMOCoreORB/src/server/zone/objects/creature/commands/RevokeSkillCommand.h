@@ -6,7 +6,6 @@
 #define REVOKESKILLCOMMAND_H_
 
 #include "server/zone/objects/scene/SceneObject.h"
-#include "server/zone/managers/skill/SkillManager.h"
 
 class RevokeSkillCommand : public QueueCommand {
 public:
@@ -17,9 +16,16 @@ public:
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
-		
-	return SUCCESS;
+
+		if (!checkStateMask(creature))
+			return INVALIDSTATE;
+
+		if (!checkInvalidLocomotions(creature))
+			return INVALIDLOCOMOTION;
+
+		return SUCCESS;
 	}
+
 };
 
 #endif //REVOKESKILLCOMMAND_H_

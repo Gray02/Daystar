@@ -38,7 +38,6 @@ void WeaponObjectImplementation::initializeTransientMembers() {
 	if(speedSlice > 1.0 || speedSlice < .5) {
 		speedSlice = 1;
 	}
-	
 }
 
 void WeaponObjectImplementation::notifyLoadFromDatabase() {
@@ -99,7 +98,6 @@ void WeaponObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 	
 	if (!isJediWeapon()) {
 		setSliceable(true);
-
 	} else if (isJediWeapon()) {
 		setSliceable(false);
 	}
@@ -360,7 +358,7 @@ void WeaponObjectImplementation::fillAttributeList(AttributeListMessage* alm, Cr
 	// Force Cost
 	if (getForceCost() > 0)
 		alm->insertAttribute("forcecost", (int)getForceCost());
-	
+
 	for (int i = 0; i < getNumberOfDots(); i++) {
 
 			String dt;
@@ -510,8 +508,6 @@ float WeaponObjectImplementation::getAttackSpeed(bool withPup) {
 
 	if(sliced)
 		speed *= speedSlice;
-	
-	
 
 	if(powerupObject != NULL && withPup)
 		speed -= (speed * powerupObject->getPowerupStat("attackSpeed"));
@@ -623,12 +619,12 @@ void WeaponObjectImplementation::updateCraftingValues(CraftingValues* values, bo
 	setHealthAttackCost((int)values->getCurrentValue("attackhealthcost"));
 	setActionAttackCost((int)values->getCurrentValue("attackactioncost"));
 	setMindAttackCost((int)values->getCurrentValue("attackmindcost"));
-	
+
 	if (isJediWeapon()) {
 		setForceCost((int)values->getCurrentValue("forcecost"));
 		setBladeColor(31);
 	}
-	
+
 	value = values->getCurrentValue("woundchance");
 	if (value != ValuesMap::VALUENOTFOUND)
 		setWoundsRatio(value);
@@ -673,7 +669,7 @@ bool WeaponObjectImplementation::isCertifiedFor(CreatureObject* object) {
 
 	if (ghost == NULL)
 		return false;
-	
+
 	Vector<String>* certificationsRequired = weaponTemplate->getCertificationsRequired();
 
 	for (int i = 0; i < certificationsRequired->size(); ++i) {

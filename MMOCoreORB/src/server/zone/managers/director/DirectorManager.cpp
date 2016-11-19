@@ -73,6 +73,7 @@
 #include "server/zone/managers/player/BadgeList.h"
 #include "server/zone/managers/player/LuaQuestInfo.h"
 #include "server/zone/objects/tangible/misc/FsPuzzlePack.h"
+#include "server/zone/objects/tangible/misc/FsCsObject.h"
 #include "server/zone/objects/tangible/misc/CustomIngredient.h"
 #include "server/zone/objects/tangible/misc/FsCraftingComponentObject.h"
 #include "server/zone/objects/player/sui/LuaSuiPageData.h"
@@ -82,7 +83,6 @@
 #include "server/zone/objects/tangible/component/Component.h"
 #include "server/zone/objects/pathfinding/NavMeshRegion.h"
 #include "server/zone/managers/collision/NavMeshManager.h"
-
 
 int DirectorManager::DEBUG_MODE = 0;
 int DirectorManager::ERROR_CODE = NO_ERROR;
@@ -521,6 +521,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	Luna<LuaTicketObject>::Register(luaEngine->getLuaState());
 	Luna<LuaQuestInfo>::Register(luaEngine->getLuaState());
 	Luna<LuaFsPuzzlePack>::Register(luaEngine->getLuaState());
+	Luna<LuaFsCsObject>::Register(luaEngine->getLuaState());
 	Luna<LuaResourceSpawn>::Register(luaEngine->getLuaState());
 	Luna<LuaCustomIngredient>::Register(luaEngine->getLuaState());
 	Luna<LuaFsCraftingComponentObject>::Register(luaEngine->getLuaState());
@@ -1061,7 +1062,7 @@ int DirectorManager::createServerEvent(lua_State* L) {
 	String eventName = lua_tostring(L, -1);
 	String key = lua_tostring(L, -2);
 	String play = lua_tostring(L, -3);
-	uint32 mili = lua_tonumber(L, -4);
+	uint64 mili = lua_tonumber(L, -4);
 
 	Reference<PersistentEvent*> pEvent = getServerEvent(eventName);
 
@@ -1246,7 +1247,7 @@ int DirectorManager::spatialChat(lua_State* L) {
 			EXECUTE_TASK_3(creature, chatManager, taskMessage, {
 					Locker locker(creature_p);
 
-					chatManager_p->broadcastChatMessage(creature_p, taskMessage_p, 0, 0, 0);
+					chatManager_p->broadcastChatMessage(creature_p, taskMessage_p, 0, 0, creature_p->getMoodID());
 			});
 		}
 	} else {
@@ -1256,7 +1257,7 @@ int DirectorManager::spatialChat(lua_State* L) {
 			EXECUTE_TASK_3(creature, chatManager, message, {
 					Locker locker(creature_p);
 
-					chatManager_p->broadcastChatMessage(creature_p, message_p, 0, 0, 0);
+					chatManager_p->broadcastChatMessage(creature_p, message_p, 0, 0, creature_p->getMoodID());
 			});
 		}
 	}

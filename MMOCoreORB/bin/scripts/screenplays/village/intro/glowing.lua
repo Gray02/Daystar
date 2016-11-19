@@ -102,7 +102,7 @@ PROFESSIONBADGES = {
 	CRAFTING_MERCHANT_MASTER,
 	CRAFTING_TAILOR_MASTER,
 	CRAFTING_WEAPONSMITH_MASTER,
-	OUTDOORS_BIOENGINEER_MASTER,
+	OUTDOORS_BIO_ENGINEER_MASTER,
 	OUTDOORS_CREATUREHANDLER_MASTER,
 	OUTDOORS_RANGER_MASTER,
 	OUTDOORS_SCOUT_MASTER,
@@ -182,7 +182,7 @@ function Glowing:badgeAwardedEventHandler(pCreatureObject, pCreatureObject2, bad
 
 	if self:countBadges(pCreatureObject) >= TOTALNUMBEROFBADGESREQUIRED then
 		VillageJediManagerCommon.setJediProgressionScreenPlayState(pCreatureObject, VILLAGE_JEDI_PROGRESSION_GLOWING)
-		OldManIntroEncounter:start(pCreatureObject)
+		FsIntro:startPlayerOnIntro(pCreatureObject)
 		return 1
 	end
 
@@ -201,16 +201,6 @@ end
 function Glowing:onPlayerLoggedIn(pCreatureObject)
 	if not self:isGlowing(pCreatureObject) then
 		self:registerObservers(pCreatureObject)
-	end
-
-	if VillageJediManagerCommon.hasJediProgressionScreenPlayState(pCreatureObject, VILLAGE_JEDI_PROGRESSION_COMPLETED_VILLAGE)
-		and not VillageJediManagerCommon.hasJediProgressionScreenPlayState(pCreatureObject, VILLAGE_JEDI_PROGRESSION_DEFEATED_MELLIACHAE) then
-		if VillageJediManagerCommon.hasJediProgressionScreenPlayState(pCreatureObject, VILLAGE_JEDI_PROGRESSION_ACCEPTED_MELLICHAE) then
-			MellichaeOutroTheater:finish(pCreatureObject)
-			MellichaeOutroTheater:start(pCreatureObject)
-		else
-			OldManOutroEncounter:start(pCreatureObject)
-		end
 	end
 end
 

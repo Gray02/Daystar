@@ -16,7 +16,6 @@ void StartingLocationTerminalImplementation::initializeTransientMembers() {
 	TerminalImplementation::initializeTransientMembers();
 
 	setLoggingName("StartingLocationTerminal");
-	setInfoLogLevel();
 }
 
 int StartingLocationTerminalImplementation::handleObjectMenuSelect(CreatureObject* player, byte selectedID) {
